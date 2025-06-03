@@ -4,6 +4,7 @@ Route Planner Launcher
 ======================
 
 This script detects the operating system and launches the appropriate script.
+It uses the paths module for cross-platform compatibility.
 """
 
 import os
@@ -12,15 +13,37 @@ import subprocess
 import sys
 from pathlib import Path
 
+# Add the current directory to sys.path if needed
+current_dir = Path(__file__).parent.absolute()
+if str(current_dir) not in sys.path:
+    sys.path.insert(0, str(current_dir))
+
+try:
+    # Try to import from the package
+    from route_planner.paths import get_app_dir, get_platform_script
+except ImportError:
+    # If that fails, try to import directly
+    sys.path.insert(0, str(current_dir / 'route_planner'))
+    try:
+        from paths import get_app_dir, get_platform_script
+    except ImportError:
+        # If all else fails, define the functions directly
+        def get_app_dir():
+            return Path(__file__).parent.absolute()
+        
+        def get_platform_script(script_name):
+            app_dir = get_app_dir()
+            if platform.system() == "Windows":
+                return app_dir / f"{script_name}.bat"
+            else:
+                return app_dir / f"{script_name}.sh"
+
 def main():
     """Main entry point that delegates to platform-specific scripts."""
-    project_root = Path(__file__).parent.absolute()
+    project_root = get_app_dir()
     
     # Determine which script to run based on platform
-    if platform.system() == "Windows":
-        script_path = project_root / 'run_route_planner.bat'
-    else:  # Linux, MacOS, etc.
-        script_path = project_root / 'run_route_planner.sh'
+    script_path = get_platform_script('run_route_planner')
     
     if not script_path.exists():
         print(f"❌ {script_path.name} not found")
