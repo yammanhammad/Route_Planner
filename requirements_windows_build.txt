@@ -1,0 +1,15 @@
+# Windows Build Requirements
+# These packages are needed to create standalone Windows executables
+
+pyinstaller>=5.0
+auto-py-to-exe>=2.3.0
+pillow>=9.0.0
+
+# Core application dependencies (embedded in executable)
+PyQt5>=5.15.0
+folium>=0.14.0
+requests>=2.28.0
+geopy>=2.3.0
+networkx>=3.0
+numpy>=1.24.0
+matplotlib>=3.6.0

@@ -1,6 +1,22 @@
 # Delivery Route Planner
 
-![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)
+![Versio## 🚀 Quick Start
+
+### Option 1: Windows Users - Double-Click & Run! 🖱️
+
+**The easiest way for Windows users** - no Python installation required:
+
+1. **Download**: Get `RoutePlanner-Portable.zip` from [GitHub Releases](https://github.com/yammanhammad/Route_Planner/releases)
+2. **Extract**: Unzip anywhere on your computer
+3. **Run**: Double-click `RoutePlanner.exe` to start!
+
+**Benefits:**
+- ✅ No Python installation needed
+- ✅ No command line required  
+- ✅ Works on any Windows 7+ system
+- ✅ Portable - runs from any location
+
+### Option 2: Using Installation Script (Technical Users)https://img.shields.io/badge/version-1.0.0-blue.svg)
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
 ![Python](https://img.shields.io/badge/python-3.8%2B-blue.svg)
 ![Windows Compatibility](https://img.shields.io/badge/Windows%20Compatibility-97.2%25-brightgreen.svg)
