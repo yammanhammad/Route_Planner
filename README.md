@@ -32,13 +32,45 @@ A sophisticated PyQt5-based desktop application for optimizing delivery routes i
 
 ## 🔧 Installation
 
-### System Requirements
-- Python 3.8 or higher
-- PyQt5 with WebEngine support
-- 4GB+ RAM recommended for large route calculations
-- Internet connection (for initial map data)
+### Option 1: Quick Start (Recommended)
 
-### Setup Instructions
+Run the automatic installation script:
+
+```bash
+# For Windows
+python install.py
+
+# For macOS/Linux
+./install.py
+```
+
+This will install the application and create desktop shortcuts if possible.
+
+For a system-wide installation (requires admin privileges):
+
+```bash
+# For Windows (Run as Administrator)
+python install.py --global
+
+# For macOS/Linux
+sudo ./install.py --global
+```
+
+### Option 2: Virtual Environment Setup
+
+If you prefer to run the application from a virtual environment:
+
+```bash
+# For Windows
+python setup_env.py
+
+# For macOS/Linux
+./setup_env.py
+```
+
+This will create a virtual environment, install dependencies, and provide instructions for running the application.
+
+### Option 3: Manual Installation
 
 1. **Clone the repository**
    ```bash
@@ -48,14 +80,25 @@ A sophisticated PyQt5-based desktop application for optimizing delivery routes i
 
 2. **Create and activate a virtual environment** (recommended)
    ```bash
+   # For Windows
    python -m venv .venv
-   source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+   .venv\Scripts\activate
+
+   # For macOS/Linux
+   python3 -m venv .venv
+   source .venv/bin/activate
    ```
 
 3. **Install dependencies**
    ```bash
    pip install -r requirements.txt
    ```
+
+### System Requirements
+- Python 3.8 or higher
+- PyQt5 with WebEngine support
+- 4GB+ RAM recommended for large route calculations
+- Internet connection (for initial map data)
 
 ### Dependencies
 - **PyQt5** (≥5.15) - GUI framework and web engine
@@ -69,11 +112,24 @@ A sophisticated PyQt5-based desktop application for optimizing delivery routes i
 ## 📋 Usage
 
 ### Running the Application
-```bash
-python main.py
-```
 
-The application will automatically set up the virtual environment, install dependencies if needed, and launch the Route Planner interface.
+After installation, you can run the application in several ways:
+
+1. **Using the desktop shortcut** (if created during installation)
+
+2. **Using the command line:**
+   ```bash
+   route-planner
+   ```
+
+3. **Running the script directly:**
+   ```bash
+   # For Windows
+   python route_planner.py
+
+   # For macOS/Linux
+   ./route_planner.py
+   ```
 
 ### First-Time Usage
 1. The welcome dialog introduces key features of the application
@@ -132,18 +188,24 @@ Key configuration categories:
 ├── main_app.py           # Core application code (UI, algorithms, logic)
 ├── config.py             # Configuration constants
 ├── requirements.txt      # Python dependencies
-├── run_route_planner.sh  # Environment setup and launcher script
+├── run_route_planner.sh  # Linux/macOS launcher script
+├── run_route_planner.bat # Windows launcher script
+├── route_planner.py      # Cross-platform launcher
+├── setup_env.py          # Virtual environment setup script
+├── install.py            # Installation script
+├── LICENSE               # MIT License file
 ├── settings.json         # Runtime settings (auto-generated)
 ├── route_planner.log     # Application logs
 ├── cache/                # Cached graph data for performance
-└── __pycache__/          # Python bytecode cache
+└── route_planner/        # Package directory
 ```
 
 ### Key Files Explained
 - **main.py**: Launcher script that ensures proper environment activation
 - **main_app.py**: Core application with UI, algorithms, and business logic
 - **config.py**: Configuration settings for customizing application behavior
-- **run_route_planner.sh**: Shell script for environment setup and application launch
+- **run_route_planner.sh/bat**: Platform-specific launcher scripts
+- **route_planner.py**: Cross-platform launcher that selects the appropriate script
 
 ## 🧠 Algorithms
 
@@ -198,7 +260,24 @@ Key configuration categories:
 - **Offline Capability**: Local caching with 1-week retention for graphs and route data
 - **Memory Management**: Efficient cleanup and context managers for resource handling
 
-## 🔧 Troubleshooting
+## � Cross-Platform Support
+
+### Windows
+- Fully compatible with Windows 10/11
+- Desktop shortcut creation during installation
+- Batch script launcher for easy execution
+
+### macOS
+- Compatible with macOS 10.15+ (Catalina and newer)
+- Support for Apple Silicon via Rosetta 2
+- Command file launcher for desktop execution
+
+### Linux
+- Compatible with major distributions (Ubuntu, Fedora, Debian, etc.)
+- Desktop entry creation for integration with application menus
+- Shell script launcher with proper environment activation
+
+## �🔧 Troubleshooting
 
 ### Common Issues
 - **Map not displaying**: Check internet connection or verify cached map data
