@@ -2,6 +2,31 @@
 
 This guide will walk you through creating the Windows executable and updating the GitHub release.
 
+## ⚠️ CRITICAL COMPATIBILITY NOTICE
+
+**IMPORTANT**: Recent testing (June 2025) revealed a critical compatibility issue:
+
+### Known Issue
+- **Problem**: Application crashes with `ucrtbase.dll.crealf` error
+- **Affected**: Systems missing Microsoft Visual C++ Runtime
+- **Impact**: Immediate crash on startup
+
+### Required Dependencies
+Users MUST have **Microsoft Visual C++ Redistributable** installed:
+```
+Download: https://aka.ms/vs/17/release/vc_redist.x64.exe
+```
+
+### For Developers
+When building Windows executables, consider:
+1. **Include vcredist_x64.exe** in your distribution package
+2. **Test on clean Windows VM** without development tools
+3. **Verify on Windows 7/8/10/11** across different environments
+
+See `docs/WINDOWS_COMPATIBILITY_REPORT.md` for full technical details.
+
+---
+
 ## Prerequisites ✅
 
 1. **Windows 10/11** (recommended for best compatibility)
