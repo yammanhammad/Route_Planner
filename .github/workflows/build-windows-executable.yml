@@ -98,9 +98,8 @@ jobs:
         
         def main():
             try:
-                from main_app import RoutePlannerApp
-                app = RoutePlannerApp()
-                app.run()
+                from main_app import main
+                main()
             except Exception as e:
                 try:
                     from PyQt5.QtWidgets import QApplication, QMessageBox
@@ -108,7 +107,7 @@ jobs:
                     msg = QMessageBox()
                     msg.setIcon(QMessageBox.Critical)
                     msg.setWindowTitle("Route Planner Error")
-                    msg.setText(f"Failed to start Route Planner:\n\n{str(e)}")
+                    msg.setText(f"Failed to start Route Planner:\\n\\n{str(e)}")
                     msg.setDetailedText("Please download the latest version from GitHub.")
                     msg.exec_()
                 except: 
