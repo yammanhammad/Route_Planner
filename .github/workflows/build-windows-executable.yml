@@ -103,7 +103,7 @@ jobs:
         
         def main():
             try:
-                from main_app import main
+                from main import main
                 main()
             except Exception as e:
                 try:
@@ -128,7 +128,7 @@ jobs:
           --windowed `
           --name "RoutePlanner" `
           --icon "icon.ico" `
-          --add-data "main_app.py;." `
+          --add-data "main.py;." `
           --add-data "config.py;." `
           --add-data "README.md;." `
           --add-data "LICENSE;." `

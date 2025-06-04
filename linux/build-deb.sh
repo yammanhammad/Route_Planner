@@ -45,7 +45,7 @@ if [ ! -d "venv" ]; then
     deactivate
 fi
 source venv/bin/activate
-python3 main_app.py "$@"
+python3 main.py "$@"
 EOF
 chmod +x "$PACKAGE_DIR/usr/local/bin/route-planner"
 

@@ -71,7 +71,7 @@ fi
 
 # Test main application import
 print_status "Testing main application import..."
-if python3 -c "import sys; sys.path.insert(0, '.'); import main_app; print('✅ Main application imports successfully')"; then
+if python3 -c "import sys; sys.path.insert(0, '.'); import main; print('✅ Main application imports successfully')"; then
     print_success "Application import test passed"
 else
     print_error "Application import test failed"

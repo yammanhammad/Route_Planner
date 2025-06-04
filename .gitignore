@@ -14,8 +14,10 @@ settings.json
 # Generated HTML files
 *.html
 
-# Application cache and logs
+# Application cache, logs, and runtime data
 cache/
+logs/
+data/
 *.log
 
 # IDE/Editor files
@@ -32,3 +34,5 @@ Thumbs.db
 build/
 dist/
 *.egg-info/
+build_temp/
+dist_windows/

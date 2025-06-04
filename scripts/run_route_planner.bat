@@ -10,7 +10,7 @@ set "PROJECT_DIR=%~dp0"
 if "%PROJECT_DIR:~-1%"=="\" set "PROJECT_DIR=%PROJECT_DIR:~0,-1%"
 set "VENV_DIR=%PROJECT_DIR%.venv"
 set "REQUIREMENTS_FILE=%PROJECT_DIR%requirements.txt"
-set "MAIN_APP=%PROJECT_DIR%main_app.py"
+set "MAIN_APP=%PROJECT_DIR%main.py"
 
 :: Change to project directory
 cd "%PROJECT_DIR%"
@@ -61,7 +61,7 @@ if exist "%REQUIREMENTS_FILE%" (
 
 :: Verify main application exists
 if not exist "%MAIN_APP%" (
-    echo [31m❌ main_app.py not found at: %MAIN_APP%[0m
+    echo [31m❌ main.py not found at: %MAIN_APP%[0m
     pause
     exit \b 1
 )

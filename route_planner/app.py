@@ -3567,7 +3567,7 @@ class PlannerUI(QtWidgets.QMainWindow):
             """
             <div style="font-family: Arial, sans-serif; max-width: 500px;">
                 <h2 style="color: #4a86e8; margin-bottom: 10px;">Delivery Route Planner</h2>
-                <p style="font-size: 14px; color: #666;"><b>Version 1.0</b> (June 2025)</p>
+                <p style="font-size: 14px; color: #666;"><b>Version 1.0.3</b> (June 2025)</p>
                 
                 <p style="margin-top: 15px; line-height: 1.4;">
                     A sophisticated application for optimizing delivery routes through advanced

@@ -117,7 +117,7 @@ def main():
         
         # Files to include in the archive
         include_files = [
-            'main.py', 'main_app.py', 'config.py', 'requirements.txt',
+            'main.py', 'config.py', 'requirements.txt',
             'run_route_planner.sh', 'run_route_planner.bat', 'route_planner.py',
             'setup_env.py', 'install.py', 'README.md', 'LICENSE'
         ]

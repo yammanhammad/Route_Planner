@@ -71,7 +71,7 @@ create_launcher() {
 #!/bin/bash
 cd "$INSTALL_DIR"
 source "$INSTALL_DIR/venv/bin/activate"
-python3 main_app.py "\$@"
+python3 main.py "\$@"
 EOF
     
     chmod +x "$BIN_DIR/route-planner"

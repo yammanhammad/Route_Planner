@@ -15,7 +15,7 @@ NC='\033[0m' # No Color
 PROJECT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 VENV_DIR="$PROJECT_DIR/.venv"
 REQUIREMENTS_FILE="$PROJECT_DIR/requirements.txt"
-MAIN_APP="$PROJECT_DIR/main_app.py"
+MAIN_APP="$PROJECT_DIR/main.py"
 
 echo -e "${BLUE}🎯 Route Planner Environment Setup${NC}"
 
@@ -49,7 +49,7 @@ fi
 
 # Verify main application exists
 if [ ! -f "$MAIN_APP" ]; then
-    echo -e "${RED}❌ main_app.py not found${NC}"
+    echo -e "${RED}❌ main.py not found${NC}"
     exit 1
 fi
 

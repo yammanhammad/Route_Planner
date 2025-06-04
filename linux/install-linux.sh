@@ -116,7 +116,7 @@ create_launcher() {
 # Route Planner Launcher
 cd "$INSTALL_DIR"
 source "$INSTALL_DIR/venv/bin/activate"
-python3 main_app.py "\$@"
+python3 main.py "\$@"
 deactivate
 EOF
     

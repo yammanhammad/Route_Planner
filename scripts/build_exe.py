@@ -80,11 +80,10 @@ def main():
         sys.path.insert(0, str(current_dir))
         
         # Import and run the main application
-        from main_app import RoutePlannerApp
+        from route_planner.main import main as app_main
         
         print("Starting Route Planner...")
-        app = RoutePlannerApp()
-        app.run()
+        app_main()
         
     except ImportError as e:
         error_msg = f"""Route Planner failed to start due to missing dependencies.
@@ -147,7 +146,7 @@ def build_executable():
         "--workpath", "build_temp",     # Temporary build directory
         
         # Include all necessary files and modules
-        "--add-data", "main_app.py;.",
+        "--add-data", "main.py;.",
         "--add-data", "config.py;.",
         "--add-data", "README.md;.",
         "--add-data", "LICENSE;.",
@@ -285,8 +284,8 @@ def main():
     print("=" * 50)
     
     # Check if we're in the right directory
-    if not Path("main_app.py").exists():
-        print("❌ Error: main_app.py not found in current directory")
+    if not Path("main.py").exists():
+        print("❌ Error: main.py not found in current directory")
         print("Please run this script from the Route_Planner root directory")
         return False
     

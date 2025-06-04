@@ -97,7 +97,7 @@ cat > ~/.local/bin/route-planner << 'EOF'
 #!/bin/bash
 cd /path/to/Route_Planner
 source venv/bin/activate
-python3 main_app.py "$@"
+python3 main.py "$@"
 EOF
 chmod +x ~/.local/bin/route-planner
 

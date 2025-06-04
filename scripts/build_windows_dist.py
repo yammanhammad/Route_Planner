@@ -142,9 +142,8 @@ sys.path.insert(0, str(bundle_dir))
 
 def main():
     try:
-        from main_app import RoutePlannerApp
-        app = RoutePlannerApp()
-        app.run()
+        from route_planner.main import main as app_main
+        app_main()
     except Exception as e:
         # Show error dialog
         try:
@@ -178,7 +177,7 @@ if __name__ == "__main__":
             "--specpath", str(self.dist_dir),
             
             # Add data files
-            "--add-data", f"{self.project_root}/main_app.py;.",
+            "--add-data", f"{self.project_root}/main.py;.",
             "--add-data", f"{self.project_root}/config.py;.",
             
             # Hidden imports

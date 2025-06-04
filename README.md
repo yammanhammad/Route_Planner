@@ -344,7 +344,6 @@ python main.py
 ```
 Route_Planner/
 ├── 📱 main.py                    # Application launcher
-├── 🖥️ main_app.py               # Core application with UI and algorithms
 ├── ⚙️ config.py                 # Configuration settings
 ├── 📋 requirements.txt          # Python dependencies
 ├── 🐧 route_planner.py          # Cross-platform launcher
@@ -355,6 +354,13 @@ Route_Planner/
 ├── 📊 settings.json             # Runtime settings (auto-generated)
 ├── 📝 route_planner.log         # Application logs
 ├── 💾 cache/                    # Cached graph data for performance
+├── 📁 data/                     # Runtime data storage
+├── 📁 logs/                     # Application log files
+├── 📦 route_planner/            # Main application package
+│   ├── __init__.py              # Package initialization
+│   ├── app.py                   # Core application with UI and algorithms
+│   ├── main.py                  # Package entry point
+│   └── paths.py                 # Cross-platform path utilities
 ├── � linux/                    # Linux installation scripts and desktop integration
 │   ├── install-linux.sh         # System-wide installer
 │   ├── install-user.sh          # User-level installer
