@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Route Planner Main Entry Point
+Route Planner Core Entry Point
 ==============================
 
 This is the main entry point for the Route Planner application.

@@ -46,6 +46,26 @@ jobs:
         pip install -r requirements.txt
         pip install pyinstaller pillow
         
+    - name: Download Visual C++ Redistributable
+      run: |
+        Write-Output "📥 Downloading Visual C++ Redistributable..."
+        $vcredistUrl = "https://aka.ms/vs/17/release/vc_redist.x64.exe"
+        $vcredistPath = "scripts\vc_redist.x64.exe"
+        
+        try {
+          Invoke-WebRequest -Uri $vcredistUrl -OutFile $vcredistPath
+          if (Test-Path $vcredistPath) {
+            $size = (Get-Item $vcredistPath).Length / 1MB
+            Write-Output "✅ Downloaded vc_redist.x64.exe ($([math]::Round($size, 1)) MB)"
+          } else {
+            Write-Output "❌ Download failed"
+            exit 1
+          }
+        } catch {
+          Write-Output "❌ Error downloading Visual C++ Redistributable: $_"
+          exit 1
+        }
+        
     - name: Create application icon
       run: |
         python -c "
@@ -121,38 +141,47 @@ jobs:
         
         if __name__ == "__main__": main()' > windows_launcher.py
         
-    - name: Build executable with PyInstaller
+    - name: Build executable with enhanced PyInstaller configuration
       run: |
-        python -m PyInstaller `
-          --onefile `
-          --windowed `
-          --name "RoutePlanner" `
-          --icon "icon.ico" `
-          --add-data "main.py;." `
-          --add-data "config.py;." `
-          --add-data "README.md;." `
-          --add-data "LICENSE;." `
-          --hidden-import "PyQt5.QtCore" `
-          --hidden-import "PyQt5.QtWidgets" `
-          --hidden-import "PyQt5.QtWebEngineWidgets" `
-          --hidden-import "folium" `
-          --hidden-import "requests" `
-          --hidden-import "geopy" `
-          --hidden-import "networkx" `
-          --hidden-import "osmnx" `
-          --hidden-import "shapely" `
-          --hidden-import "shapely.geometry" `
-          --hidden-import "sklearn" `
-          --hidden-import "numpy" `
-          --hidden-import "matplotlib" `
-          --hidden-import "urllib3" `
-          --hidden-import "certifi" `
-          --collect-all "folium" `
-          --collect-all "branca" `
-          --collect-all "osmnx" `
-          --strip `
-          --optimize "2" `
-          windows_launcher.py
+        Write-Output "🏗️ Building executable with Visual C++ runtime bundling..."
+        
+        # Use our enhanced spec file instead of basic PyInstaller command
+        if (Test-Path "scripts\windows_build.spec") {
+          Write-Output "Using enhanced PyInstaller spec file for better runtime bundling..."
+          python -m PyInstaller --distpath dist --workpath dist\build --clean scripts\windows_build.spec
+        } else {
+          Write-Output "Spec file not found, using enhanced PyInstaller command..."
+          python -m PyInstaller `
+            --onefile `
+            --windowed `
+            --name "RoutePlanner" `
+            --icon "icon.ico" `
+            --add-data "main.py;." `
+            --add-data "config.py;." `
+            --add-data "route_planner;route_planner" `
+            --hidden-import "PyQt5.QtCore" `
+            --hidden-import "PyQt5.QtWidgets" `
+            --hidden-import "PyQt5.QtWebEngineWidgets" `
+            --hidden-import "folium" `
+            --hidden-import "requests" `
+            --hidden-import "geopy" `
+            --hidden-import "networkx" `
+            --hidden-import "osmnx" `
+            --hidden-import "shapely" `
+            --hidden-import "shapely.geometry" `
+            --hidden-import "sklearn" `
+            --hidden-import "numpy" `
+            --hidden-import "matplotlib" `
+            --hidden-import "urllib3" `
+            --hidden-import "certifi" `
+            --collect-all "folium" `
+            --collect-all "branca" `
+            --collect-all "osmnx" `
+            --strip `
+            --noupx `
+            --runtime-hook scripts\runtime_hook_vcruntime.py `
+            main.py
+        }
           
     - name: Verify executable
       run: |
@@ -196,24 +225,146 @@ jobs:
         }
         
         # Create user-friendly README
-        echo "Route Planner - Portable Version" > "dist\RoutePlanner_Portable\README.txt"
-        echo "================================" >> "dist\RoutePlanner_Portable\README.txt"
-        echo "" >> "dist\RoutePlanner_Portable\README.txt"
-        echo "QUICK START:" >> "dist\RoutePlanner_Portable\README.txt"
-        echo "Double-click RoutePlanner.exe to start the application." >> "dist\RoutePlanner_Portable\README.txt"
-        echo "" >> "dist\RoutePlanner_Portable\README.txt"
-        echo "WHAT IS THIS?" >> "dist\RoutePlanner_Portable\README.txt"
-        echo "Route Planner helps you find the most efficient routes between multiple locations." >> "dist\RoutePlanner_Portable\README.txt"
-        echo "Perfect for delivery drivers, sales teams, or anyone who needs to visit multiple places." >> "dist\RoutePlanner_Portable\README.txt"
-        echo "" >> "dist\RoutePlanner_Portable\README.txt"
-        echo "FEATURES:" >> "dist\RoutePlanner_Portable\README.txt"
-        echo "- Interactive map interface" >> "dist\RoutePlanner_Portable\README.txt"
-        echo "- Smart route optimization" >> "dist\RoutePlanner_Portable\README.txt"
-        echo "- Multiple algorithm options" >> "dist\RoutePlanner_Portable\README.txt"
-        echo "- Works offline after initial setup" >> "dist\RoutePlanner_Portable\README.txt"
-        echo "- No installation required" >> "dist\RoutePlanner_Portable\README.txt"
-        echo "" >> "dist\RoutePlanner_Portable\README.txt"
-        echo "SUPPORT: https://github.com/yammanhammad/Route_Planner" >> "dist\RoutePlanner_Portable\README.txt"
+        $readmeContent = @"
+Route Planner - Portable Version
+================================
+
+IMPORTANT: Visual C++ Redistributable Required
+This version requires Microsoft Visual C++ Redistributable.
+If you get "ucrtbase.dll.crealf" errors, download it from:
+https://aka.ms/vs/17/release/vc_redist.x64.exe
+
+QUICK START:
+1. Install Visual C++ Redistributable (if needed)
+2. Double-click RoutePlanner.exe to start the application.
+
+WHAT IS THIS?
+Route Planner helps you find the most efficient routes between multiple locations.
+Perfect for delivery drivers, sales teams, or anyone who needs to visit multiple places.
+
+FEATURES:
+- Interactive map interface
+- Smart route optimization  
+- Multiple algorithm options
+- Works offline after initial setup
+- No installation required
+
+SUPPORT: https://github.com/yammanhammad/Route_Planner
+
+For a version that includes Visual C++ Redistributable automatically,
+download the "Bundled" package instead.
+"@
+        
+        $readmeContent | Out-File -FilePath "dist\RoutePlanner_Portable\README.txt" -Encoding UTF8
+        
+    - name: Create bundled package with Visual C++ Redistributable
+      run: |
+        Write-Output "📦 Creating bundled package with Visual C++ Redistributable..."
+        
+        # Create bundled directory
+        New-Item -ItemType Directory -Path "dist\RoutePlanner_Bundled" -Force
+        
+        # Copy executable
+        Copy-Item "dist\RoutePlanner.exe" "dist\RoutePlanner_Bundled\"
+        
+        # Copy Visual C++ Redistributable
+        if (Test-Path "scripts\vc_redist.x64.exe") {
+          Copy-Item "scripts\vc_redist.x64.exe" "dist\RoutePlanner_Bundled\"
+          Write-Output "✅ Visual C++ Redistributable included"
+        } else {
+          Write-Output "⚠️ Visual C++ Redistributable not found, bundled package will be incomplete"
+        }
+        
+        # Copy documentation
+        $docs = @("README.md", "LICENSE", "CHANGELOG.md")
+        foreach ($doc in $docs) {
+          if (Test-Path $doc) {
+            Copy-Item $doc "dist\RoutePlanner_Bundled\"
+          }
+        }
+        
+        # Create setup script
+        $setupScript = @'
+@echo off
+echo Route Planner Setup
+echo ==================
+echo.
+
+echo Checking for Visual C++ Redistributable...
+reg query "HKLM\SOFTWARE\Microsoft\VisualStudio\14.0\VC\Runtimes\x64" >nul 2>&1
+if %ERRORLEVEL% EQU 0 (
+    echo Visual C++ Redistributable is already installed.
+    goto :run_app
+)
+
+echo Visual C++ Redistributable not found. Installing...
+echo.
+echo This may take a few minutes...
+vc_redist.x64.exe /quiet /norestart
+if %ERRORLEVEL% EQU 0 (
+    echo Visual C++ Redistributable installed successfully.
+) else (
+    echo Warning: Visual C++ Redistributable installation may have failed.
+    echo If the app doesn't work, run vc_redist.x64.exe manually.
+)
+
+:run_app
+echo.
+echo Starting Route Planner...
+start RoutePlanner.exe
+echo.
+echo Setup complete! Route Planner should now be running.
+pause
+'@
+        
+        $setupScript | Out-File -FilePath "dist\RoutePlanner_Bundled\setup.bat" -Encoding ASCII
+        
+        # Create bundled README
+        $bundledReadme = @"
+Route Planner - Bundled Edition
+===============================
+
+QUICK SETUP:
+1. Double-click "setup.bat" for automatic setup and launch
+2. Or double-click "RoutePlanner.exe" directly
+
+WHAT'S INCLUDED:
+✅ Route Planner application (RoutePlanner.exe)
+✅ Visual C++ Redistributable (vc_redist.x64.exe)  
+✅ Automatic setup script (setup.bat)
+
+ABOUT THIS VERSION:
+This bundled version includes the Microsoft Visual C++ Redistributable
+to ensure the application works on all Windows systems, even those
+missing required runtime components.
+
+MANUAL INSTALLATION:
+If setup.bat doesn't work:
+1. Run vc_redist.x64.exe first
+2. Then run RoutePlanner.exe
+
+NO MORE ucrtbase.dll.crealf ERRORS!
+This package resolves all Visual C++ runtime dependency issues.
+
+FEATURES:
+✅ Interactive map interface
+✅ Smart route optimization
+✅ Multiple algorithm options  
+✅ Works offline after initial setup
+
+SYSTEM REQUIREMENTS:
+- Windows 7 or newer
+- 4GB RAM recommended
+- Internet connection for maps
+
+SUPPORT:
+Visit: https://github.com/yammanhammad/Route_Planner
+
+LICENSE:
+MIT License - See LICENSE file for details.
+"@
+        
+        $bundledReadme | Out-File -FilePath "dist\RoutePlanner_Bundled\README.txt" -Encoding UTF8
         
     - name: Create ZIP package
       run: |

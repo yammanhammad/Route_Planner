@@ -58,7 +58,8 @@ When reporting issues, please include:
 git clone https://github.com/yammanhammad/Route_Planner.git
 cd Route_Planner
 python scripts/setup_env.py
-python -m pytest tests/
+# Test the application manually
+python main.py
 ```
 
 ## Code of Conduct

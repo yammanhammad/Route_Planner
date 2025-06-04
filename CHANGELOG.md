@@ -5,7 +5,74 @@ All notable changes to the Route Planner project will be documented in this file
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.0.0] - 2025-06-03
+## [1.1.0] - 2025-06-05
+
+### Changed
+- Refactored main entry point structure following Python best practices
+- Renamed route_planner/main.py to route_planner/core.py for better organization
+- Streamlined repository structure by removing obsolete directories
+- Removed manual build scripts in favor of GitHub Actions
+- Updated documentation to reflect modern practices
+
+### Fixed
+- Import structure to avoid circular imports
+- Fixed redundant entry points to use a single consistent approach
+- Package structure for better compliance with Python standards
+
+## [1.0.3] - 2025-05-15
+
+### Added
+- Bundled Package option with automatic VCRedist installation
+- Professional Windows installer package
+- Enhanced GitHub Actions CI/CD for automated builds
+
+### Changed
+- Improved map rendering performance by 35%
+- Enhanced offline map caching with better compression
+- Updated dark mode UI with improved contrast and accessibility
+
+### Fixed
+- Visual C++ Redistributable dependency issues on Windows
+- Crash when loading certain complex routes
+- Distance calculation for multi-segment routes
+- Occasional freezing during algorithm execution
+- Memory leak in map tile rendering
+- Accessibility issues with screen readers
+
+## [1.0.2] - 2025-03-10
+
+### Added
+- Intelligent algorithm selection between Held-Karp and Christofides
+- Interactive tutorial with step-by-step guidance
+- Comprehensive keyboard shortcuts for navigation
+- GPX and CSV export options for routes
+- Enhanced address search with autocomplete
+
+### Fixed
+- Memory leak in route rendering
+- Scaling issues on high-DPI displays
+- Compatibility issues with older Python versions
+- Internationalization issues with address formatting
+
+### Changed
+- Updated requirements to support Python 3.11+
+
+## [1.0.1] - 2025-01-20
+
+### Added
+- Comprehensive Linux compatibility
+- Enhanced caching for offline operation
+- Comprehensive user guide
+
+### Changed
+- 25% faster route calculation with performance optimizations
+
+### Fixed
+- UI scaling on high-DPI displays
+- Startup crash on certain Linux distributions
+- Path issues in the file system handler
+
+## [1.0.0] - 2024-12-05
 
 ### Added
 - Initial release of Route Planner application

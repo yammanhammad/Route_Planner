@@ -1,68 +1,42 @@
-# Scripts
+# Scripts Directory
 
-This directory contains utility scripts for building, installing, and running the Route Planner application.
+This directory contains essential utility scripts for building, installing, and running the Route Planner application.
 
-## Windows Executable Builder 🖱️
+## Overview
 
-**For creating user-friendly Windows distributions:**
+These scripts serve three main functions:
+- Development environment setup and installation
+- Application launching across platforms
+- Windows build and packaging configuration
 
-- `build_windows_dist.py` - Complete Windows distribution builder
-- `build_exe.py` - Simple executable builder
-- `build_for_windows.bat` - Automated Windows build script
-- `installer.nsi` - NSIS installer script
+## Key Scripts
 
-### Building Windows Executable
-```bash
-# Complete automated build
-python scripts/build_windows_dist.py
+### Environment and Installation
 
-# Simple executable only
-python scripts/build_exe.py
-
-# Windows batch (double-click to run)
-scripts\build_for_windows.bat
-```
-
-**Output**: Creates `dist_windows/` with:
-- `RoutePlanner.exe` - Standalone executable 
-- `RoutePlanner-Portable.zip` - Complete portable package
-- Ready for distribution to Windows users!
-
-## Installation Scripts
-
+- `setup_env.py` - Sets up development environment with dependencies
 - `install.py` - Cross-platform installation script
-- `setup_env.py` - Environment setup utility
-- `build.py` - Build script for creating distribution packages
 
-## Platform-Specific Launchers
+### Application Launchers
 
 - `run_route_planner.sh` - Unix/Linux/macOS launcher script
 - `run_route_planner.bat` - Windows batch launcher script
 
-## Usage
+### Windows Build Configuration
 
-### Windows User-Friendly Distribution
-```bash
-# Build everything for Windows users
-python scripts/build_windows_dist.py
+- `windows_build.spec` - PyInstaller spec file for Windows builds
+- `runtime_hook_vcruntime.py` - Runtime hook for Visual C++ compatibility
+- `installer.nsi` - NSIS installer script for Windows installer creation
 
-# Share the resulting RoutePlanner-Portable.zip
-# Users just extract and double-click RoutePlanner.exe!
-```
+## Usage Examples
 
-### Quick Installation
-```bash
-python scripts/install.py
-```
-
-### Environment Setup
+### Development Environment Setup
 ```bash
 python scripts/setup_env.py
 ```
 
-### Building Distribution
+### Application Installation
 ```bash
-python scripts/build.py
+python scripts/install.py
 ```
 
 ### Running the Application
@@ -74,21 +48,24 @@ python scripts/build.py
 scripts\run_route_planner.bat
 ```
 
-## Windows Build Details
+## Windows Build Process
 
-The Windows executable builder creates a completely standalone application:
+Windows executables are automatically built by the GitHub Actions CI/CD pipeline. The workflow:
 
-**Benefits for Windows Users:**
-- ✅ No Python installation required
-- ✅ Double-click to run
-- ✅ Professional Windows integration
-- ✅ Portable - runs from any location
-- ✅ Error handling with friendly messages
+1. Uses `windows_build.spec` as the PyInstaller configuration
+2. Applies `runtime_hook_vcruntime.py` for VC++ compatibility
+3. Builds standalone executable and installer using `installer.nsi`
+4. Uploads assets to GitHub Releases
 
-**Technical Details:**
-- Uses PyInstaller for executable creation
-- Embeds all dependencies (~50-80 MB final size)
-- Includes application icon and version info
-- Ready for code signing and distribution
+For detailed information on the Windows build process, see [../DEVELOPMENT.md](../DEVELOPMENT.md#building-and-packaging).
 
-For detailed instructions, see: `../docs/WINDOWS_BUILD_GUIDE.md`
+## Notes for Contributors
+
+When modifying scripts:
+- Maintain cross-platform compatibility
+- Test on Windows, macOS, and Linux when possible
+- Follow the project's code style guidelines
+- Update documentation comments
+- Add appropriate error handling
+
+For comprehensive development information, see [../DEVELOPMENT.md](../DEVELOPMENT.md).

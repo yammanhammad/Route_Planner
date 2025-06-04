@@ -11,7 +11,7 @@ with open("requirements.txt", "r", encoding="utf-8") as f:
 
 setup(
     name="route-planner",
-    version="1.0.3",
+    version="1.1.0",
     author="Route Planner Development Team",
     author_email="your.email@example.com",
     description="A PyQt5-based delivery route optimization application",
@@ -34,7 +34,7 @@ setup(
     install_requires=requirements,
     entry_points={
         "console_scripts": [
-            "route-planner=route_planner.main:main",
+            "route-planner=route_planner.core:main",
         ],
     },
 )

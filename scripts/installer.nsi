@@ -1,18 +1,24 @@
 ;Route Planner Windows Installer Script (NSIS)
-;Creates a professional Windows installer
+;Creates a professional Windows installer with Visual C++ Redistributable
 
 !define APP_NAME "Route Planner"
-!define APP_VERSION "1.0.3"
+!define APP_VERSION "1.1.0"
 !define APP_PUBLISHER "Route Planner Team"
 !define APP_URL "https://github.com/yammanhammad/Route_Planner"
 !define APP_EXECUTABLE "RoutePlanner.exe"
+!define VCREDIST_URL "https://aka.ms/vs/17/release/vc_redist.x64.exe"
 
-;Include Modern UI
+;Include Modern UI and additional functionality
 !include "MUI2.nsh"
+!include "LogicLib.nsh"
+!include "nsDialogs.nsh"
+
+;Required for downloading files
+!include "WinVer.nsh"
 
 ;General Settings
 Name "${APP_NAME}"
-OutFile "dist_windows\RoutePlanner-${APP_VERSION}-Setup.exe"
+OutFile "dist\RoutePlanner-${APP_VERSION}-Setup.exe"
 InstallDir "$PROGRAMFILES\${APP_NAME}"
 InstallDirRegKey HKCU "Software\${APP_NAME}" ""
 RequestExecutionLevel admin
@@ -47,24 +53,74 @@ RequestExecutionLevel admin
 !insertmacro MUI_LANGUAGE "English"
 
 ;Version Information
-VIProductVersion "1.0.3.0"
+VIProductVersion "1.1.0.0"
 VIAddVersionKey /LANG=${LANG_ENGLISH} "ProductName" "${APP_NAME}"
 VIAddVersionKey /LANG=${LANG_ENGLISH} "CompanyName" "${APP_PUBLISHER}"
 VIAddVersionKey /LANG=${LANG_ENGLISH} "LegalCopyright" "© 2025 ${APP_PUBLISHER}"
 VIAddVersionKey /LANG=${LANG_ENGLISH} "FileDescription" "${APP_NAME} Installer"
 VIAddVersionKey /LANG=${LANG_ENGLISH} "FileVersion" "${APP_VERSION}"
 
+;Check and install Visual C++ Redistributable
+Function .onInit
+  ;Check if Visual C++ Redistributable is installed
+  Call CheckVCRedist
+FunctionEnd
+
+Function CheckVCRedist
+  ;Check registry for Visual C++ 2015-2022 Redistributable
+  ReadRegStr $0 HKLM "SOFTWARE\Microsoft\VisualStudio\14.0\VC\Runtimes\x64" "Version"
+  ${If} $0 == ""
+    ;Check alternative location
+    ReadRegStr $0 HKLM "SOFTWARE\WOW6432Node\Microsoft\VisualStudio\14.0\VC\Runtimes\x64" "Version"
+  ${EndIf}
+  
+  ${If} $0 == ""
+    MessageBox MB_YESNO|MB_ICONQUESTION \
+      "Microsoft Visual C++ Redistributable is required but not installed.$\n$\nWould you like to download and install it now?$\n$\n(This is necessary for the application to run properly)" \
+      IDYES InstallVCRedist IDNO SkipVCRedist
+    
+    InstallVCRedist:
+      DetailPrint "Downloading Visual C++ Redistributable..."
+      NSISdl::download "${VCREDIST_URL}" "$TEMP\vc_redist.x64.exe"
+      Pop $R0
+      ${If} $R0 == "success"
+        DetailPrint "Installing Visual C++ Redistributable..."
+        ExecWait '"$TEMP\vc_redist.x64.exe" /quiet /norestart' $0
+        Delete "$TEMP\vc_redist.x64.exe"
+        ${If} $0 != 0
+          MessageBox MB_OK|MB_ICONEXCLAMATION \
+            "Visual C++ Redistributable installation failed.$\n$\nYou may need to install it manually from:$\n${VCREDIST_URL}"
+        ${Else}
+          DetailPrint "Visual C++ Redistributable installed successfully"
+        ${EndIf}
+      ${Else}
+        MessageBox MB_OK|MB_ICONEXCLAMATION \
+          "Failed to download Visual C++ Redistributable.$\n$\nPlease download and install it manually from:$\n${VCREDIST_URL}"
+      ${EndIf}
+      Goto EndVCRedist
+    
+    SkipVCRedist:
+      MessageBox MB_OK|MB_ICONWARNING \
+        "The application may not work properly without Visual C++ Redistributable.$\n$\nIf you encounter errors, please install it from:$\n${VCREDIST_URL}"
+    
+    EndVCRedist:
+  ${Else}
+    DetailPrint "Visual C++ Redistributable is already installed"
+  ${EndIf}
+FunctionEnd
+
 ;Installation Section
 Section "Main Application" SecMain
   SetOutPath "$INSTDIR"
   
   ;Add files
-  File "dist_windows\${APP_EXECUTABLE}"
+  File "dist\${APP_EXECUTABLE}"
   File "README.md"
   File "LICENSE"
   File "CHANGELOG.md"
   
-  ;Add documentation folder
+  ;Add documentation folder if exists
+  IfFileExists "docs" 0 +3
   SetOutPath "$INSTDIR\docs"
   File /r "docs\*.*"
   

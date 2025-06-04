@@ -1,13 +1,10 @@
 #!/usr/bin/env python3
 """
-Route Planner - Auto-Setup Launcher
-===================================
+Route Planner - Main Entry Point
+===============================
 
-This script automatically sets up and runs the Route Planner application.
-It ensures the virtual environment is properly activated and dependencies are installed.
-
-Usage:
-    python main.py  (works without manual environment activation)
+This script is the main entry point for the Route Planner application.
+It handles environment setup and launches the application.
 """
 import sys
 import subprocess
@@ -18,15 +15,15 @@ def main():
     """Main entry point that delegates to the package entry point."""
     # Try to import and run the package directly
     try:
-        from route_planner.main import main as app_main
+        from route_planner.core import main as app_main
         app_main()
     except ImportError:
         # Fallback: delegate to shell script for proper environment setup
         project_root = Path(__file__).parent.absolute()
-        shell_script = project_root / 'run_route_planner.sh'
+        shell_script = project_root / ('run_route_planner.bat' if sys.platform == 'win32' else 'run_route_planner.sh')
         
         if not shell_script.exists():
-            print("❌ run_route_planner.sh not found")
+            print(f"❌ {shell_script.name} not found")
             sys.exit(1)
         
         # Execute the shell script which handles environment activation

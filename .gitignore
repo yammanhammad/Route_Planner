@@ -35,4 +35,4 @@ build/
 dist/
 *.egg-info/
 build_temp/
-dist_windows/
+dist/
