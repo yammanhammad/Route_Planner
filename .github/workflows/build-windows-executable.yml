@@ -135,12 +135,17 @@ jobs:
           --hidden-import "requests" `
           --hidden-import "geopy" `
           --hidden-import "networkx" `
+          --hidden-import "osmnx" `
+          --hidden-import "shapely" `
+          --hidden-import "shapely.geometry" `
+          --hidden-import "sklearn" `
           --hidden-import "numpy" `
           --hidden-import "matplotlib" `
           --hidden-import "urllib3" `
           --hidden-import "certifi" `
           --collect-all "folium" `
           --collect-all "branca" `
+          --collect-all "osmnx" `
           --strip `
           --optimize "2" `
           windows_launcher.py
