@@ -10,3 +10,13 @@ recursive-include route_planner *.py
 recursive-include scripts *.sh *.bat *.py *.nsi
 recursive-include docs *.md
 recursive-include linux *.sh *.py *.desktop
+prune route_planner/__pycache__
+prune route_planner/cache
+prune route_planner/data
+prune route_planner/logs
+prune cache
+prune data  
+prune logs
+prune build
+prune dist
+prune *.egg-info
