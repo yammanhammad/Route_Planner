@@ -50,7 +50,25 @@ pip install route-planner
 route-planner
 ```
 
-### 🛠️ Option 3: Development Setup
+### � Option 3: Linux One-Click Installation
+
+For Linux users who want the app to appear in their Applications menu:
+
+```bash
+# One-line installer (Ubuntu/Debian)
+curl -sSL https://raw.githubusercontent.com/yammanhammad/Route_Planner/master/linux/quick-install.sh | bash
+```
+
+**✅ What you get:**
+- App appears in Applications menu
+- Desktop integration with proper icon
+- Launch from terminal with `route-planner`
+- Automatic Python environment setup
+- Easy uninstallation
+
+For more Linux installation options, see [`linux/README.md`](linux/README.md)
+
+### �🛠️ Option 4: Development Setup
 
 For developers who want to contribute or modify the code:
 

@@ -1,0 +1,14 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Route Planner
+GenericName=Delivery Route Optimizer
+Comment=Optimize delivery routes using advanced algorithms
+Exec=/usr/local/bin/route-planner
+Icon=route-planner
+Terminal=false
+Categories=Office;Utility;Geography;
+Keywords=route;delivery;optimization;map;navigation;TSP;
+StartupNotify=true
+MimeType=application/x-route-planner;
+StartupWMClass=route-planner
