@@ -187,41 +187,24 @@ jobs:
         }
         
         # Create user-friendly README
-        @"
-Route Planner - Portable Version
-================================
-
-QUICK START:
-Double-click "RoutePlanner.exe" to start the application.
-
-WHAT IS THIS?
-Route Planner helps you find the most efficient routes between multiple locations.
-Perfect for delivery drivers, sales teams, or anyone who needs to visit multiple places.
-
-FEATURES:
-✓ Interactive map interface
-✓ Smart route optimization
-✓ Multiple algorithm options  
-✓ Works offline after initial setup
-✓ No installation required
-
-SYSTEM REQUIREMENTS:
-- Windows 7 or newer
-- 4GB RAM recommended
-- Internet connection for maps
-
-TROUBLESHOOTING:
-If the app doesn't start:
-1. Right-click RoutePlanner.exe → "Run as administrator"
-2. Check Windows Defender isn't blocking it
-3. Download the latest version from GitHub
-
-SUPPORT:
-Visit: https://github.com/yammanhammad/Route_Planner
-
-LICENSE:
-MIT License - See LICENSE file for details.
-"@ | Out-File -FilePath "dist\RoutePlanner_Portable\README.txt" -Encoding UTF8
+        echo "Route Planner - Portable Version" > "dist\RoutePlanner_Portable\README.txt"
+        echo "================================" >> "dist\RoutePlanner_Portable\README.txt"
+        echo "" >> "dist\RoutePlanner_Portable\README.txt"
+        echo "QUICK START:" >> "dist\RoutePlanner_Portable\README.txt"
+        echo "Double-click RoutePlanner.exe to start the application." >> "dist\RoutePlanner_Portable\README.txt"
+        echo "" >> "dist\RoutePlanner_Portable\README.txt"
+        echo "WHAT IS THIS?" >> "dist\RoutePlanner_Portable\README.txt"
+        echo "Route Planner helps you find the most efficient routes between multiple locations." >> "dist\RoutePlanner_Portable\README.txt"
+        echo "Perfect for delivery drivers, sales teams, or anyone who needs to visit multiple places." >> "dist\RoutePlanner_Portable\README.txt"
+        echo "" >> "dist\RoutePlanner_Portable\README.txt"
+        echo "FEATURES:" >> "dist\RoutePlanner_Portable\README.txt"
+        echo "- Interactive map interface" >> "dist\RoutePlanner_Portable\README.txt"
+        echo "- Smart route optimization" >> "dist\RoutePlanner_Portable\README.txt"
+        echo "- Multiple algorithm options" >> "dist\RoutePlanner_Portable\README.txt"
+        echo "- Works offline after initial setup" >> "dist\RoutePlanner_Portable\README.txt"
+        echo "- No installation required" >> "dist\RoutePlanner_Portable\README.txt"
+        echo "" >> "dist\RoutePlanner_Portable\README.txt"
+        echo "SUPPORT: https://github.com/yammanhammad/Route_Planner" >> "dist\RoutePlanner_Portable\README.txt"
         
     - name: Create ZIP package
       run: |
