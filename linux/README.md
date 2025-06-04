@@ -119,6 +119,30 @@ source ~/.bashrc
 
 ## 🐛 Troubleshooting
 
+### Installation fails with "ModuleNotFoundError: No module named 'PIL'"
+
+This issue occurs when the icon creation process runs before all dependencies are properly installed. **This has been fixed in the latest version.**
+
+**Quick Fix:**
+```bash
+# Try the installation again with the latest version
+curl -sSL https://raw.githubusercontent.com/yammanhammad/Route_Planner/master/linux/quick-install.sh | bash
+```
+
+**Manual Fix (if you still encounter issues):**
+```bash
+# If installation partially completed:
+cd ~/.local/share/route-planner  # For user installation
+# OR
+cd /opt/route-planner             # For system installation
+
+# Activate the virtual environment and install Pillow
+source venv/bin/activate
+pip install pillow
+python3 linux/create_icon.py
+deactivate
+```
+
 ### App doesn't appear in menu
 - Log out and back in, or restart your desktop session
 - Run: `update-desktop-database ~/.local/share/applications`
@@ -133,6 +157,11 @@ source ~/.bashrc
 ### Python environment issues
 - Ensure Python 3.8+ is installed: `python3 --version`
 - Install pip: `sudo apt install python3-pip`
+
+### Installation hangs or takes too long
+- This is normal for first-time installation as it downloads PyQt5 and other large dependencies
+- Ensure you have a stable internet connection
+- The process may take 5-15 minutes depending on your connection speed
 
 ## 📋 System Requirements
 
