@@ -3,9 +3,24 @@
 ![Version](https://img.shields.io/badge/version-1.0.3-blue.svg)
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
 ![Python](https://img.shields.io/badge/python-3.8%2B-blue.svg)
-![Windows Compatibility](https://img.shields.io/badge/Windows%20Compatibility-✅%20Ready-brightgreen.svg)
+![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20Linux%20%7C%20macOS-lightgrey.svg)
+![Windows](https://img.shields.io/badge/Windows-0078D4?logo=windows&logoColor=white)
+![Linux](https://img.shields.io/badge/Linux-FCC624?logo=linux&logoColor=black)
+![macOS](https://img.shields.io/badge/macOS-000000?logo=apple&logoColor=white)
 
 A sophisticated desktop application for optimizing delivery routes using advanced algorithms. Perfect for delivery drivers, sales teams, logistics coordinators, and anyone who needs to visit multiple locations efficiently.
+
+## 📋 Table of Contents
+
+- [🌟 Key Features](#-key-features)
+- [🚀 Installation Guide](#-installation-guide)
+- [📱 How to Use](#-how-to-use)
+- [🛠️ Troubleshooting & Support](#-troubleshooting--support)
+- [⚙️ System Requirements](#-system-requirements)
+- [🧠 Algorithms Explained](#-algorithms-explained)
+- [🏗️ Architecture & Technical Details](#-architecture--technical-details)
+- [📁 Project Structure](#-project-structure)
+- [🆘 Support & Documentation](#-support--documentation)
 
 ## 🌟 Key Features
 
@@ -21,7 +36,113 @@ A sophisticated desktop application for optimizing delivery routes using advance
 
 ---
 
-## 🚀 Quick Start
+## 🚀 Installation Guide
+
+Choose the installation method that best fits your needs:
+
+### 📦 Windows - One-Click Installation (Recommended)
+
+**The easiest way for Windows users** - no Python installation required:
+
+1. **📥 Download**: Get the latest `RoutePlanner-Windows-Portable.zip` from [**GitHub Releases**](https://github.com/yammanhammad/Route_Planner/releases/latest)
+2. **📂 Extract**: Unzip anywhere on your computer
+3. **🖱️ Run**: Double-click `RoutePlanner.exe` to start!
+
+**✅ Benefits:**
+- No Python installation needed
+- No command line required  
+- Works on any Windows 7+ system
+- Portable - runs from any location
+- Automatic updates available
+
+📚 **Need help?** See [Windows Installation Guide](docs/WINDOWS_EXECUTABLE_GUIDE.md) for troubleshooting
+
+### 🐧 Linux - Multiple Options Available
+
+#### Option A: One-Line Installer (Recommended)
+```bash
+curl -sSL https://raw.githubusercontent.com/yammanhammad/Route_Planner/master/linux/quick-install.sh | bash
+```
+
+#### Option B: User-Level Installation (No root required)
+```bash
+git clone https://github.com/yammanhammad/Route_Planner.git
+cd Route_Planner
+./linux/install-user.sh
+```
+
+#### Option C: System-Wide Installation
+```bash
+git clone https://github.com/yammanhammad/Route_Planner.git
+cd Route_Planner
+sudo ./linux/install-linux.sh
+```
+
+**✅ What you get:**
+- App appears in Applications menu
+- Desktop integration with proper icon
+- Launch from terminal with `route-planner`
+- Automatic Python environment setup
+- Easy uninstallation
+
+📚 **For detailed Linux instructions, troubleshooting, and package installation:** [Linux Installation Guide](linux/README.md)
+
+### 🍎 macOS - Python Installation
+
+For macOS users, use the Python package manager method:
+
+```bash
+# Install Python 3.8+ if not already installed
+brew install python3
+
+# Install Route Planner
+pip3 install route-planner
+
+# Run the application
+route-planner
+```
+
+**Requirements:**
+- macOS 10.14 (Mojave) or newer
+- Python 3.8 or higher
+- Homebrew (for dependency management)
+
+**Note:** A native macOS app bundle (.dmg) is planned for future releases.
+
+### 🐍 Cross-Platform Python Installation
+
+For Python developers or users on any platform:
+
+```bash
+# Install via pip
+pip install route-planner
+
+# Run the application
+route-planner
+```
+
+**Verification:** After installation, verify it works:
+```bash
+route-planner --version  # Should show version 1.0.3
+```
+
+### 🛠️ Development Setup
+
+For developers who want to contribute or modify the code:
+
+```bash
+# Clone the repository
+git clone https://github.com/yammanhammad/Route_Planner.git
+cd Route_Planner
+
+# Set up environment
+python scripts/setup_env.py
+
+# Run the application
+python main.py
+```
+
+📚 **For contributors:** See [Contributing Guide](docs/CONTRIBUTING.md)
 
 ### 📦 Option 1: Windows Users - One-Click Installation (Recommended)
 
@@ -108,13 +229,55 @@ python main.py
 
 ---
 
+## 🛠️ Troubleshooting & Support
+
+### 🚨 Common Issues
+
+**Installation Problems:**
+- **Windows:** See [Windows Installation Guide](docs/WINDOWS_EXECUTABLE_GUIDE.md)
+- **Linux:** See [Linux Installation Guide](linux/README.md) 
+- **macOS:** Ensure Python 3.8+ and PyQt5 are properly installed
+
+**Runtime Issues:**
+- **Map not loading:** Check internet connection for initial setup
+- **Application won't start:** Verify all dependencies are installed
+- **Performance issues:** Ensure 4GB+ RAM available
+
+### 📚 Documentation Links
+
+- 📖 [Full Documentation](docs/README.md)
+- 🐧 [Linux Installation Guide](linux/README.md)
+- 🏗️ [Windows Build Guide](docs/WINDOWS_BUILD_GUIDE.md)
+- 🤝 [Contributing Guidelines](docs/CONTRIBUTING.md)
+- 📋 [Release Notes](docs/RELEASE_NOTES_v1.0.3.md)
+
+### 💬 Getting Help
+
+- 🐛 **Found a bug?** [Open an issue](https://github.com/yammanhammad/Route_Planner/issues/new)
+- 💡 **Feature request?** [Start a discussion](https://github.com/yammanhammad/Route_Planner/discussions)
+- ❓ **Need help?** Check [existing issues](https://github.com/yammanhammad/Route_Planner/issues) first
+
+---
+
 ## ⚙️ System Requirements
 
-### 💻 Windows Users (Executable)
+### 💻 Windows (Executable)
 - Windows 7 or newer
 - 4GB RAM recommended
 - 200MB disk space
 - Internet connection (for initial map data)
+
+### 🐧 Linux (All Distributions)
+- Ubuntu 18.04+, Debian 10+, or equivalent
+- Python 3.8 or higher
+- 4GB+ RAM recommended
+- Desktop environment (GNOME, KDE, XFCE, etc.)
+
+### 🍎 macOS
+- macOS 10.14 (Mojave) or newer
+- Python 3.8 or higher
+- 4GB+ RAM recommended
+- Homebrew (recommended for dependency management)
 
 ### 🐍 Python Users (All Platforms)
 - Python 3.8 or higher
@@ -329,5 +492,17 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ---
 
 **© 2025 Route Planner Development Team**
+
+---
+
+## 🔗 Additional Resources
+
+- 🌐 [GitHub Repository](https://github.com/yammanhammad/Route_Planner)
+- 📦 [Latest Releases](https://github.com/yammanhammad/Route_Planner/releases)
+- 📊 [Project Roadmap](https://github.com/yammanhammad/Route_Planner/projects)
+- 💬 [Community Discussions](https://github.com/yammanhammad/Route_Planner/discussions)
+- 🐛 [Report Issues](https://github.com/yammanhammad/Route_Planner/issues)
+
+**⭐ If you find Route Planner useful, please consider giving it a star on GitHub!**
 
 ⭐ **Star this repository if it helps you optimize your routes!** ⭐
