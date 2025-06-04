@@ -49,8 +49,8 @@ install_app() {
     # Create directories
     mkdir -p "$INSTALL_DIR" "$BIN_DIR" "$DESKTOP_DIR" "$ICON_DIR"
     
-    # Copy files
-    cp -r . "$INSTALL_DIR/"
+    # Copy files (excluding git, cache, and pycache)
+    rsync -av --exclude='.git' --exclude='__pycache__' --exclude='cache' --exclude='*.pyc' . "$INSTALL_DIR/"
     
     # Create virtual environment
     print_status "Setting up Python environment..."

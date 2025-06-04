@@ -17,7 +17,7 @@ class WindowsDistributionBuilder:
         self.project_root = Path(__file__).parent.parent
         self.scripts_dir = Path(__file__).parent
         self.dist_dir = self.project_root / "dist_windows"
-        self.version = "1.0.0"
+        self.version = "1.0.2"
         
     def setup_environment(self):
         """Set up build environment"""

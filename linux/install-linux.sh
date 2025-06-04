@@ -90,7 +90,8 @@ install_application() {
     mkdir -p "$INSTALL_DIR"
     
     # Copy application files
-    cp -r . "$INSTALL_DIR/"
+    # Copy files (excluding git, cache, and pycache)
+    rsync -av --exclude='.git' --exclude='__pycache__' --exclude='cache' --exclude='*.pyc' . "$INSTALL_DIR/"
     
     # Create virtual environment
     print_status "Creating Python virtual environment..."
@@ -116,6 +117,7 @@ create_launcher() {
 cd "$INSTALL_DIR"
 source "$INSTALL_DIR/venv/bin/activate"
 python3 main_app.py "\$@"
+deactivate
 EOF
     
     chmod +x "$BIN_LINK"
@@ -130,14 +132,27 @@ install_desktop_integration() {
     if [ -f "linux/create_icon.py" ]; then
         cd "$INSTALL_DIR"
         source venv/bin/activate
-        python3 linux/create_icon.py
-        deactivate
         
-        # Install icons
-        if [ -d "linux/icons" ]; then
-            cp -r linux/icons/hicolor/* "$ICON_DIR/"
-            print_success "Application icons installed"
+        # Check if PIL/Pillow is available
+        if python3 -c "import PIL" 2>/dev/null; then
+            print_status "Creating application icons..."
+            python3 linux/create_icon.py
+            
+            # Install icons if created successfully
+            if [ -d "linux/icons" ]; then
+                cp -r linux/icons/hicolor/* "$ICON_DIR/"
+                print_success "Application icons installed"
+            else
+                print_warning "Icon creation succeeded but icons directory not found"
+            fi
+        else
+            print_warning "PIL/Pillow not available, skipping icon creation"
+            # Create a simple text-based fallback icon or skip
         fi
+        
+        deactivate
+    else
+        print_warning "Icon creation script not found, skipping custom icons"
     fi
     
     # Install desktop entry
@@ -240,13 +255,29 @@ main() {
     echo
     print_status "Starting Route Planner..."
     
-    # Try to start the application to verify installation
-    if sudo -u "$SUDO_USER" $BIN_LINK --version 2>/dev/null; then
-        print_success "Installation verified successfully!"
+    print_status "Verifying installation..."
+    
+    # Test Python environment and basic imports
+    cd "$INSTALL_DIR"
+    source venv/bin/activate
+    
+    # Test if virtual environment is working
+    if python3 -c "import sys; print('Python executable:', sys.executable)" 2>/dev/null; then
+        print_success "Virtual environment is working"
     else
-        print_warning "Installation completed but verification failed"
-        print_status "Try running: $EXECUTABLE_NAME"
+        print_warning "Virtual environment test failed"
     fi
+    
+    # Test if required packages are installed
+    if python3 -c "import PyQt5, networkx, folium, osmnx; print('✅ Core dependencies available')" 2>/dev/null; then
+        print_success "Core dependencies verified"
+    else
+        print_warning "Some dependencies may be missing"
+    fi
+    
+    deactivate
+    
+    print_success "Installation verification completed!"
 }
 
 # Handle interruption
