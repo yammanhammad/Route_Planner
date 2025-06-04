@@ -12,7 +12,7 @@ BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
 # Project directory
-PROJECT_DIR="/home/innoxent_ghost/Route_Planner"
+PROJECT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 VENV_DIR="$PROJECT_DIR/.venv"
 REQUIREMENTS_FILE="$PROJECT_DIR/requirements.txt"
 MAIN_APP="$PROJECT_DIR/main_app.py"

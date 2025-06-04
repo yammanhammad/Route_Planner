@@ -185,21 +185,29 @@ Route_Planner/
 ├── ⚙️ config.py                 # Configuration settings
 ├── 📋 requirements.txt          # Python dependencies
 ├── 🐧 route_planner.py          # Cross-platform launcher
-├── 📄 README.md                 # This documentation
+├── � run_route_planner.sh      # Unix launcher (root)
+├── 🏁 run_route_planner.bat     # Windows launcher (root)
+├── �📄 README.md                 # This documentation
 ├── 📜 LICENSE                   # MIT License
 ├── 📊 settings.json             # Runtime settings (auto-generated)
 ├── 📝 route_planner.log         # Application logs
 ├── 💾 cache/                    # Cached graph data for performance
-├── 📚 docs/                     # Documentation
-│   ├── RELEASE_NOTES.md         # Version history  
+├── � linux/                    # Linux installation scripts and desktop integration
+│   ├── install-linux.sh         # System-wide installer
+│   ├── install-user.sh          # User-level installer
+│   ├── quick-install.sh         # One-line installer
+│   ├── create_icon.py           # Icon generator
+│   └── route-planner.desktop    # Desktop entry
+├── �📚 docs/                     # Documentation
+│   ├── RELEASE_NOTES*.md        # Version history and release notes
 │   ├── WINDOWS_BUILD_GUIDE.md   # Windows build instructions
 │   └── CONTRIBUTING.md          # Contribution guidelines
 ├── 🔧 scripts/                  # Build and utility scripts
 │   ├── install.py               # Cross-platform installer
 │   ├── setup_env.py             # Environment setup
 │   ├── build_windows_dist.py    # Windows executable builder
-│   ├── run_route_planner.sh     # Unix launcher
-│   └── run_route_planner.bat    # Windows launcher
+│   ├── run_route_planner.sh     # Unix launcher (detailed)
+│   └── run_route_planner.bat    # Windows launcher (detailed)
 └── 🧪 tests/                    # Test suite
 ```
 
