@@ -56,7 +56,7 @@ Dependencies:
 
 Author: Route Planner Development Team
 License: MIT
-Version: 1.0.2
+Version: 1.0.3
 """
 
 # =============================================================================
@@ -4254,7 +4254,7 @@ def main():
     
     # Set application properties
     app.setApplicationName("Delivery Route Planner")
-    app.setApplicationVersion("1.0.2")
+    app.setApplicationVersion("1.0.3")
     app.setOrganizationName("Route Optimization Solutions")
     
     # Create and show main window

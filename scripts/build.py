@@ -41,7 +41,7 @@ def main():
     """Main build function."""
     # Parse command line arguments
     parser = argparse.ArgumentParser(description='Build Route Planner distribution packages')
-    parser.add_argument('--version', default='1.0.2', help='Version number for the release')
+    parser.add_argument('--version', default='1.0.3', help='Version number for the release')
     parser.add_argument('--clean', action='store_true', help='Clean build directories before building')
     parser.add_argument('--all', action='store_true', help='Build all package types')
     parser.add_argument('--sdist', action='store_true', help='Build source distribution')

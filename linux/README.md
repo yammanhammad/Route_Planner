@@ -31,7 +31,7 @@ sudo ./linux/install-linux.sh
 ./linux/build-deb.sh
 
 # Install the package
-sudo dpkg -i route-planner_1.0.2_all.deb
+sudo dpkg -i route-planner_1.0.3_all.deb
 sudo apt-get install -f  # Fix dependencies if needed
 ```
 

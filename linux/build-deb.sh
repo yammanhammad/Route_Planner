@@ -5,7 +5,7 @@
 set -e
 
 APP_NAME="route-planner"
-VERSION="1.0.2"
+VERSION="1.0.3"
 ARCH="all"
 MAINTAINER="Route Planner Team <support@routeplanner.com>"
 DESCRIPTION="Advanced delivery route optimization tool with TSP algorithms"

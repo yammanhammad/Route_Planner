@@ -219,7 +219,7 @@ jobs:
       run: |
         # Get version from tag or use default
         $version = "${{ github.ref_name }}" -replace '^v', ''
-        if (!$version -or $version -eq "master") { $version = "1.0.2" }
+        if (!$version -or $version -eq "master") { $version = "1.0.3" }
         
         # Create ZIP file
         $zipName = "RoutePlanner-$version-Windows-Portable.zip"

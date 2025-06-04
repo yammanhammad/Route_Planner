@@ -1,6 +1,6 @@
 # 🚚 Route Planner - Delivery Route Optimization
 
-![Version](https://img.shields.io/badge/version-1.0.2-blue.svg)
+![Version](https://img.shields.io/badge/version-1.0.3-blue.svg)
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
 ![Python](https://img.shields.io/badge/python-3.8%2B-blue.svg)
 ![Windows Compatibility](https://img.shields.io/badge/Windows%20Compatibility-✅%20Ready-brightgreen.svg)
