@@ -11,7 +11,7 @@ with open("requirements.txt", "r", encoding="utf-8") as f:
 
 setup(
     name="route-planner",
-    version="1.0.1",
+    version="1.0.2",
     author="Route Planner Development Team",
     author_email="your.email@example.com",
     description="A PyQt5-based delivery route optimization application",

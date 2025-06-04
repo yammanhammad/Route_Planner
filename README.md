@@ -302,6 +302,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-**© 2024 Route Planner Development Team**
+**© 2025 Route Planner Development Team**
 
 ⭐ **Star this repository if it helps you optimize your routes!** ⭐
