@@ -13,10 +13,16 @@ finish-args:
   - --env=QT_QPA_PLATFORM=wayland;xcb
 
 modules:
+  - name: python3-pip
+    buildsystem: simple
+    build-commands:
+      - python3 -m ensurepip --upgrade
+    sources: []
+
   - name: python3-requirements
     buildsystem: simple
     build-commands:
-      - pip3 install --prefix=${FLATPAK_DEST} --no-deps PyQt5 folium networkx osmnx shapely
+      - python3 -m pip install --prefix=${FLATPAK_DEST} PyQt5 PyQtWebEngine folium networkx osmnx shapely requests urllib3
     sources: []
 
   - name: route-planner
@@ -28,6 +34,7 @@ modules:
         cat > ${FLATPAK_DEST}/bin/route-planner << 'EOF'
         #!/bin/bash
         cd ${FLATPAK_DEST}/lib/route-planner
+        export PYTHONPATH=${FLATPAK_DEST}/lib/route-planner:${PYTHONPATH}
         python3 -m route_planner.core "$@"
         EOF
       - chmod +x ${FLATPAK_DEST}/bin/route-planner
@@ -38,7 +45,6 @@ modules:
         Name=Route Planner
         Comment=Delivery Route Optimizer
         Exec=route-planner
-        Icon=org.routeplanner.RoutePlanner
         Terminal=false
         Type=Application
         Categories=Office;
@@ -63,4 +69,4 @@ modules:
         EOF
     sources:
       - type: dir
-        path: ..
+        path: .
