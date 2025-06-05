@@ -1,0 +1,435 @@
+name: Build and Release Windows Executable
+
+on:
+  push:
+    tags:
+      - 'v*'  # Triggers on version tags like v1.0.0, v1.1.0, etc.
+  release:
+    types: [published, created]
+  workflow_dispatch:  # Allows manual trigger from GitHub UI
+    inputs:
+      version:
+        description: 'Version to build (optional)'
+        required: false
+        default: 'latest'
+
+permissions:
+  contents: write  # Required to create releases
+  actions: read    # Required to read workflow artifacts
+  checks: write    # Required to create checks
+
+jobs:
+  build-windows-executable:
+    name: Build Windows Executable
+    runs-on: windows-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'  # Use stable Python version
+        
+    - name: Cache pip dependencies
+      uses: actions/cache@v4
+      with:
+        path: ~\AppData\Local\pip\Cache
+        key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-pip-
+          
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install pyinstaller pillow
+        
+    - name: Download Visual C++ Redistributable
+      run: |
+        Write-Output "📥 Downloading Visual C++ Redistributable..."
+        $vcredistUrl = "https://aka.ms/vs/17/release/vc_redist.x64.exe"
+        $vcredistPath = "scripts\vc_redist.x64.exe"
+        
+        try {
+          Invoke-WebRequest -Uri $vcredistUrl -OutFile $vcredistPath
+          if (Test-Path $vcredistPath) {
+            $size = (Get-Item $vcredistPath).Length / 1MB
+            Write-Output "✅ Downloaded vc_redist.x64.exe ($([math]::Round($size, 1)) MB)"
+          } else {
+            Write-Output "❌ Download failed"
+            exit 1
+          }
+        } catch {
+          Write-Output "❌ Error downloading Visual C++ Redistributable: $_"
+          exit 1
+        }
+        
+    - name: Create application icon
+      run: |
+        python -c "
+        from PIL import Image, ImageDraw
+        import sys
+        
+        # Create professional icon
+        sizes = [16, 32, 48, 64, 128, 256]
+        images = []
+        
+        for size in sizes:
+            img = Image.new('RGBA', (size, size), (0, 0, 0, 0))
+            draw = ImageDraw.Draw(img)
+            
+            # Background circle
+            margin = max(2, size // 8)
+            draw.ellipse([margin, margin, size-margin, size-margin], 
+                       fill=(52, 152, 219), outline=(41, 128, 185), width=max(1, size//32))
+            
+            # Route path
+            if size >= 32:
+                path_margin = size // 4
+                points = [
+                    (path_margin, size//2),
+                    (size//3, path_margin + size//8),
+                    (2*size//3, path_margin + size//8), 
+                    (size-path_margin, size//2),
+                    (2*size//3, size-path_margin - size//8),
+                    (size//3, size-path_margin - size//8)
+                ]
+                draw.polygon(points, fill=(255, 255, 255, 200))
+            
+            # Start/end points
+            point_size = max(2, size//16)
+            draw.ellipse([margin*2, size//2-point_size//2, 
+                        margin*2+point_size, size//2+point_size//2], 
+                       fill=(231, 76, 60))
+            draw.ellipse([size-margin*2-point_size, size//2-point_size//2,
+                        size-margin*2, size//2+point_size//2], 
+                       fill=(46, 204, 113))
+            
+            images.append(img)
+        
+        # Save as ICO
+        images[0].save('icon.ico', format='ICO', sizes=[(s, s) for s in sizes], append_images=images[1:])
+        print('Icon created successfully')
+        "
+        
+    - name: Create Windows launcher
+      run: |
+        echo 'import sys; import os; from pathlib import Path
+        if hasattr(sys, "_MEIPASS"): bundle_dir = Path(sys._MEIPASS)
+        else: bundle_dir = Path(__file__).parent
+        sys.path.insert(0, str(bundle_dir))
+        
+        def main():
+            try:
+                from main import main
+                main()
+            except Exception as e:
+                try:
+                    from PyQt5.QtWidgets import QApplication, QMessageBox
+                    app = QApplication([])
+                    msg = QMessageBox()
+                    msg.setIcon(QMessageBox.Critical)
+                    msg.setWindowTitle("Route Planner Error")
+                    msg.setText(f"Failed to start Route Planner:\\n\\n{str(e)}")
+                    msg.setDetailedText("Please download the latest version from GitHub.")
+                    msg.exec_()
+                except: 
+                    print(f"Error: {e}")
+                    input("Press Enter to exit...")
+        
+        if __name__ == "__main__": main()' > windows_launcher.py
+        
+    - name: Build executable with enhanced PyInstaller configuration
+      run: |
+        Write-Output "🏗️ Building executable with Visual C++ runtime bundling..."
+        
+        # Use our enhanced spec file instead of basic PyInstaller command
+        if (Test-Path "scripts\windows_build.spec") {
+          Write-Output "Using enhanced PyInstaller spec file for better runtime bundling..."
+          python -m PyInstaller --distpath dist --workpath dist\build --clean scripts\windows_build.spec
+        } else {
+          Write-Output "Spec file not found, using enhanced PyInstaller command..."
+          python -m PyInstaller `
+            --onefile `
+            --windowed `
+            --name "RoutePlanner" `
+            --icon "icon.ico" `
+            --add-data "main.py;." `
+            --add-data "config.py;." `
+            --add-data "route_planner;route_planner" `
+            --hidden-import "PyQt5.QtCore" `
+            --hidden-import "PyQt5.QtWidgets" `
+            --hidden-import "PyQt5.QtWebEngineWidgets" `
+            --hidden-import "folium" `
+            --hidden-import "requests" `
+            --hidden-import "geopy" `
+            --hidden-import "networkx" `
+            --hidden-import "osmnx" `
+            --hidden-import "shapely" `
+            --hidden-import "shapely.geometry" `
+            --hidden-import "sklearn" `
+            --hidden-import "numpy" `
+            --hidden-import "matplotlib" `
+            --hidden-import "urllib3" `
+            --hidden-import "certifi" `
+            --collect-all "folium" `
+            --collect-all "branca" `
+            --collect-all "osmnx" `
+            --strip `
+            --noupx `
+            --runtime-hook scripts\runtime_hook_vcruntime.py `
+            main.py
+        }
+          
+    - name: Verify executable
+      run: |
+        if (Test-Path "dist\RoutePlanner.exe") {
+          $size = (Get-Item "dist\RoutePlanner.exe").Length / 1MB
+          Write-Output "✅ Executable created successfully: $([math]::Round($size, 1)) MB"
+          
+          # Test executable can start (quick test)
+          $process = Start-Process -FilePath "dist\RoutePlanner.exe" -PassThru -WindowStyle Hidden
+          Start-Sleep -Seconds 3
+          if (!$process.HasExited) {
+            Stop-Process -Id $process.Id -Force
+            Write-Output "✅ Executable starts successfully"
+          } else {
+            Write-Output "⚠️ Executable exited immediately"
+          }
+        } else {
+          Write-Error "❌ Executable not found!"
+          exit 1
+        }
+        
+    - name: Create portable package
+      run: |
+        # Create portable directory
+        New-Item -ItemType Directory -Path "dist\RoutePlanner_Portable" -Force
+        
+        # Copy executable
+        Copy-Item "dist\RoutePlanner.exe" "dist\RoutePlanner_Portable\"
+        
+        # Copy documentation
+        $docs = @("README.md", "LICENSE", "CHANGELOG.md")
+        foreach ($doc in $docs) {
+          if (Test-Path $doc) {
+            Copy-Item $doc "dist\RoutePlanner_Portable\"
+          }
+        }
+        
+        # Copy docs folder
+        if (Test-Path "docs") {
+          Copy-Item "docs" "dist\RoutePlanner_Portable\" -Recurse
+        }
+        
+        # Create user-friendly README using PowerShell string building
+        $readmeLines = @(
+          "Route Planner - Portable Version",
+          "================================",
+          "",
+          "IMPORTANT - Visual C++ Redistributable Required",
+          "This version requires Microsoft Visual C++ Redistributable.",
+          "If you get ucrtbase.dll.crealf errors, download it from",
+          "https://aka.ms/vs/17/release/vc_redist.x64.exe",
+          "",
+          "QUICK START",
+          "1. Install Visual C++ Redistributable (if needed)",
+          "2. Double-click RoutePlanner.exe to start the application.",
+          "",
+          "WHAT IS THIS",
+          "Route Planner helps you find the most efficient routes between multiple locations.",
+          "Perfect for delivery drivers, sales teams, or anyone who needs to visit multiple places.",
+          "",
+          "FEATURES",
+          "- Interactive map interface",
+          "- Smart route optimization",
+          "- Multiple algorithm options",
+          "- Works offline after initial setup",
+          "- No installation required",
+          "",
+          "SUPPORT",
+          "https://github.com/yammanhammad/Route_Planner",
+          "",
+          "For a version that includes Visual C++ Redistributable automatically,",
+          "download the Bundled package instead."
+        )
+        $readmeContent = $readmeLines -join "`r`n"
+        
+        $readmeContent | Out-File -FilePath "dist\RoutePlanner_Portable\README.txt" -Encoding UTF8
+        
+    - name: Create bundled package with Visual C++ Redistributable
+      run: |
+        Write-Output "📦 Creating bundled package with Visual C++ Redistributable..."
+        
+        # Create bundled directory
+        New-Item -ItemType Directory -Path "dist\RoutePlanner_Bundled" -Force
+        
+        # Copy executable
+        Copy-Item "dist\RoutePlanner.exe" "dist\RoutePlanner_Bundled\"
+        
+        # Copy Visual C++ Redistributable
+        if (Test-Path "scripts\vc_redist.x64.exe") {
+          Copy-Item "scripts\vc_redist.x64.exe" "dist\RoutePlanner_Bundled\"
+          Write-Output "✅ Visual C++ Redistributable included"
+        } else {
+          Write-Output "⚠️ Visual C++ Redistributable not found, bundled package will be incomplete"
+        }
+        
+        # Copy documentation
+        $docs = @("README.md", "LICENSE", "CHANGELOG.md")
+        foreach ($doc in $docs) {
+          if (Test-Path $doc) {
+            Copy-Item $doc "dist\RoutePlanner_Bundled\"
+          }
+        }
+        
+        # Create setup script using PowerShell string building
+        $setupScriptLines = @(
+          "@echo off",
+          "echo Route Planner Setup",
+          "echo ==================",
+          "echo.",
+          "",
+          "echo Checking for Visual C++ Redistributable...",
+          "reg query ""HKLM\SOFTWARE\Microsoft\VisualStudio\14.0\VC\Runtimes\x64"" >nul 2>&1",
+          "if %ERRORLEVEL% EQU 0 (",
+          "    echo Visual C++ Redistributable is already installed.",
+          "    goto :run_app",
+          ")",
+          "",
+          "echo Visual C++ Redistributable not found. Installing...",
+          "echo.",
+          "echo This may take a few minutes...",
+          "vc_redist.x64.exe /quiet /norestart",
+          "if %ERRORLEVEL% EQU 0 (",
+          "    echo Visual C++ Redistributable installed successfully.",
+          ") else (",
+          "    echo Warning: Visual C++ Redistributable installation may have failed.",
+          "    echo If the app doesn't work, run vc_redist.x64.exe manually.",
+          ")",
+          "",
+          ":run_app",
+          "echo.",
+          "echo Starting Route Planner...",
+          "start RoutePlanner.exe",
+          "echo.",
+          "echo Setup complete! Route Planner should now be running.",
+          "pause"
+        )
+        $setupScript = $setupScriptLines -join "`r`n"
+        
+        $setupScript | Out-File -FilePath "dist\RoutePlanner_Bundled\setup.bat" -Encoding ASCII
+        
+        # Create bundled README using PowerShell string building
+        $bundledReadmeLines = @(
+          "Route Planner - Bundled Edition",
+          "===============================",
+          "",
+          "QUICK SETUP",
+          "1. Double-click ""setup.bat"" for automatic setup and launch",
+          "2. Or double-click ""RoutePlanner.exe"" directly",
+          "",
+          "WHAT'S INCLUDED",
+          "* Route Planner application (RoutePlanner.exe)",
+          "* Visual C++ Redistributable (vc_redist.x64.exe)",
+          "* Automatic setup script (setup.bat)",
+          "",
+          "ABOUT THIS VERSION",
+          "This bundled version includes the Microsoft Visual C++ Redistributable",
+          "to ensure the application works on all Windows systems, even those",
+          "missing required runtime components.",
+          "",
+          "MANUAL INSTALLATION",
+          "If setup.bat doesn't work",
+          "1. Run vc_redist.x64.exe first",
+          "2. Then run RoutePlanner.exe",
+          "",
+          "NO MORE ucrtbase.dll.crealf ERRORS",
+          "This package resolves all Visual C++ runtime dependency issues.",
+          "",
+          "FEATURES",
+          "* Interactive map interface",
+          "* Smart route optimization",
+          "* Multiple algorithm options",
+          "* Works offline after initial setup",
+          "",
+          "SYSTEM REQUIREMENTS",
+          "- Windows 7 or newer",
+          "- 4GB RAM recommended",
+          "- Internet connection for maps",
+          "",
+          "SUPPORT",
+          "Visit: https://github.com/yammanhammad/Route_Planner",
+          "",
+          "LICENSE",
+          "MIT License - See LICENSE file for details."
+        )
+        $bundledReadme = $bundledReadmeLines -join "`r`n"
+        
+        $bundledReadme | Out-File -FilePath "dist\RoutePlanner_Bundled\README.txt" -Encoding UTF8
+        
+    - name: Create ZIP package
+      run: |
+        # Get version from Python package
+        $version = python -c "import sys; sys.path.insert(0, '.'); from route_planner import __version__; print(__version__)"
+        if (!$version) { 
+          # Fallback: try to get from git tag
+          $version = "${{ github.ref_name }}" -replace '^v', ''
+          if (!$version -or $version -eq "master") { 
+            # Ultimate fallback: extract from package file directly
+            $version = (Get-Content "route_planner/__init__.py" | Select-String '__version__ = ["\']([^"\']*)["\']').Matches[0].Groups[1].Value
+            if (!$version) { 
+              # Final fallback: use scripts/get_version.py
+              $version = python scripts/get_version.py
+              if (!$version) { $version = "1.1.2" }  # Absolute final fallback
+            }
+          }
+        }
+        
+        # Create ZIP file
+        $zipName = "RoutePlanner-$version-Windows-Portable.zip"
+        Compress-Archive -Path "dist\RoutePlanner_Portable\*" -DestinationPath "dist\$zipName" -Force
+        
+        # Get file size
+        $size = (Get-Item "dist\$zipName").Length / 1MB
+        Write-Output "✅ Portable package created: $zipName ($([math]::Round($size, 1)) MB)"
+        
+        # Set output for next step
+        echo "ZIP_NAME=$zipName" >> $env:GITHUB_ENV
+        echo "VERSION=$version" >> $env:GITHUB_ENV
+        
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: windows-executable
+        path: |
+          dist/RoutePlanner.exe
+          dist/RoutePlanner-*-Windows-Portable.zip
+        retention-days: 30
+        
+    - name: Upload to release (if tag)
+      if: startsWith(github.ref, 'refs/tags/')
+      uses: softprops/action-gh-release@v2
+      with:
+        files: |
+          dist/RoutePlanner.exe
+          dist/RoutePlanner-*-Windows-Portable.zip
+        body: |
+          ## 🖱️ Windows Executable Available!
+          
+          **For Windows Users (No Python Required):**
+          - Download `RoutePlanner-${{ env.VERSION }}-Windows-Portable.zip`
+          - Extract anywhere on your computer
+          - Double-click `RoutePlanner.exe` to start!
+          
+          **Benefits:**
+          ✅ No Python installation needed
+          ✅ No command line required
+          ✅ Works on Windows 7/8/10/11
+          ✅ Portable - runs from any location
+          
+          Built automatically with GitHub Actions on Windows Server 2022.
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
