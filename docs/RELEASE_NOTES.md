@@ -2,7 +2,49 @@
 
 This document contains all release notes for Route Planner, with the most recent version at the top.
 
-## Route Planner v1.0.3 (Latest)
+**🚀 Quick Installation:** Download the latest version from [GitHub Releases](https://github.com/yammanhammad/Route_Planner/releases/latest):
+- **Windows**: Choose `RoutePlanner-Bundled.zip` for the easiest installation experience
+- **Linux/macOS**: Choose `route_planner-1.1.1-py3-none-any.whl` for easy pip installation
+
+*All Windows executables and cross-platform packages are automatically built and published using GitHub Actions.*
+
+## Route Planner v1.1.1 (Latest)
+
+**Release Date:** June 2025
+
+### 🚀 Cross-Platform Package Release
+- **Cross-Platform Packages Available**: Python wheel and source distributions now available for Linux/macOS
+- **GitHub Actions Build**: All packages (Windows executables + cross-platform Python packages) automatically built via CI/CD
+- **Easy Installation**: Non-technical users can now easily install on any platform using pre-built packages
+
+### 📦 Installation Options
+- **Windows**: Download executable packages (`RoutePlanner-Bundled.zip` or `RoutePlanner-Setup.exe`)
+- **Linux/macOS**: Download Python wheel (`route_planner-1.1.1-py3-none-any.whl`) and install with pip
+- **All Platforms**: Standard PyPI installation (`pip install route-planner`) also available
+
+## Route Planner v1.1.0
+
+**Release Date:** December 2024
+
+### 🧹 Major Cleanup & Modernization
+- **Removed Obsolete Scripts**: Cleaned up manual build scripts and unnecessary files
+- **Streamlined Entry Points**: Single main.py entry point with refactored code structure
+- **Updated Documentation**: Comprehensive update of all installation guides and documentation
+- **Removed Legacy Directories**: Eliminated linux/ and tests/ directories
+- **Version Consistency**: Updated all version references to v1.1.0
+
+### 🚀 Installation Improvements
+- **Cross-Platform Packages**: Now available for Linux/macOS via GitHub Actions builds
+- **Simplified Instructions**: Installation guides now start with easiest methods for non-technical users
+- **Better Organization**: Clear prioritization of pre-built packages → Python package → source installation
+- **GitHub Actions Integration**: All Windows executables and cross-platform packages built automatically via CI/CD
+
+### 🔧 Development Enhancements
+- **Code Refactoring**: Moved route_planner/main.py to route_planner/core.py for better organization
+- **Build Process**: Fixed YAML syntax in GitHub Actions workflow
+- **Entry Point Consistency**: Updated all references to use new code structure
+
+## Route Planner v1.0.3
 
 **Release Date:** May 15, 2025
 
@@ -85,8 +127,8 @@ This document contains all release notes for Route Planner, with the most recent
 
 #### Option 1: Quick Start (Recommended)
 Download the platform-specific archive for your operating system, extract it, and run:
-- Windows: `install.py` or `run_route_planner.bat`
-- macOS/Linux: `./install.py` or `./run_route_planner.sh`
+- Windows: `run_route_planner.bat` or download executable from releases
+- macOS/Linux: `./scripts/run_route_planner.sh` or use pip install
 
 #### Option 2: Python Package (All Platforms)
 ```bash

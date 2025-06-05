@@ -12,40 +12,45 @@ This comprehensive guide covers all aspects of using Route Planner on Windows sy
 
 ## Installation Options
 
-### Option A: Bundled Package (Recommended - No Setup Required)
-**✅ Includes Visual C++ Redistributable - Works out of the box!**
+**Choose the method that works best for you. For most users, we recommend Option A.**
+
+*All Windows packages and executables are automatically built and published using our GitHub Actions CI/CD pipeline - ensuring quality and security.*
+
+### Option A: 🎯 Bundled Package (Recommended for Everyone)
+**✅ Easiest installation - Works out of the box!**
 
 1. **📥 Download**: Get `RoutePlanner-Bundled.zip` from [**GitHub Releases**](https://github.com/yammanhammad/Route_Planner/releases/latest)
-2. **📂 Extract**: Unzip anywhere on your computer
-3. **🚀 Run**: Double-click `setup.bat` for automatic setup and launch
-   - **OR** just double-click `RoutePlanner.exe` to run directly
+2. **📂 Extract**: Unzip anywhere on your computer (e.g., Desktop, Documents)
+3. **🚀 Run**: Double-click `RoutePlanner.exe` to start immediately
 
-**✅ Benefits:**
-- No manual Visual C++ installation needed
-- Automatic dependency setup
-- Works on all Windows systems
-- No Python knowledge required
+**✅ Why choose this option:**
+- **No setup required** - works immediately after download
+- **No administrator rights needed** - run from any folder
+- **All dependencies included** - Visual C++ libraries bundled automatically
+- **Portable** - copy the folder anywhere, including USB drives
 
-### Option B: Installer Package (Traditional Installation)
-**🔧 Professional installer with automatic Visual C++ handling**
+### Option B: 🏢 Professional Installer (For Business/Admin Users)
+**🔧 Traditional Windows installer experience**
 
 1. **📥 Download**: Get `RoutePlanner-Setup.exe` from [**GitHub Releases**](https://github.com/yammanhammad/Route_Planner/releases/latest)
 2. **⚙️ Install**: Run the installer (requires administrator privileges)
-3. **🚀 Launch**: Find Route Planner in Start Menu or Desktop
+3. **🚀 Launch**: Find Route Planner in Start Menu or Desktop shortcut
 
-**✅ Benefits:**
-- Professional Windows installer experience
-- Automatic Visual C++ Redistributable installation
-- Start Menu and Desktop shortcuts
-- Easy uninstallation via Control Panel
+**✅ Why choose this option:**
+- **Start Menu integration** - appears in all programs
+- **Desktop shortcut** - convenient access
+- **Automatic updates** - integrated with Windows update system
+- **Professional uninstaller** - clean removal via Control Panel
 
-### Option C: Portable Executable (Manual Setup)
-**⚠️ Requires manual Visual C++ Redistributable installation**
+### Option C: ⚡ Portable Executable (Advanced Users)
+**⚠️ Requires manual setup - only if Options A & B don't work**
 
-1. **📥 Download Redistributable**: Install [Microsoft Visual C++ Redistributable](https://aka.ms/vs/17/release/vc_redist.x64.exe) first
+1. **📥 Download Dependencies**: Install [Microsoft Visual C++ Redistributable](https://aka.ms/vs/17/release/vc_redist.x64.exe) first
 2. **📥 Download App**: Get `RoutePlanner-Portable.zip` from [**GitHub Releases**](https://github.com/yammanhammad/Route_Planner/releases/latest)
 3. **📂 Extract**: Unzip anywhere on your computer
 4. **🚀 Run**: Double-click `RoutePlanner.exe`
+
+**⚠️ Note:** This option requires manual dependency management and is only recommended if you need minimal file size or have specific technical requirements.
 
 ### Option D: Python Installation (Developer-Friendly)
 

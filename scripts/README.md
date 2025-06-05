@@ -14,7 +14,6 @@ These scripts serve three main functions:
 ### Environment and Installation
 
 - `setup_env.py` - Sets up development environment with dependencies
-- `install.py` - Cross-platform installation script
 
 ### Application Launchers
 
@@ -29,17 +28,23 @@ These scripts serve three main functions:
 
 ## Usage Examples
 
-### Development Environment Setup
+## Usage Examples
+
+### 🚀 Running the Application (Choose Your Method)
+
+**Method 1: Pre-built Executables & Packages (Easiest)**
+- Download from [GitHub Releases](https://github.com/yammanhammad/Route_Planner/releases/latest)
+- **Windows**: Run `RoutePlanner.exe` 
+- **Linux/macOS**: Install `route_planner-1.1.1-py3-none-any.whl` with pip and run `route-planner`
+- *No technical setup required!*
+
+**Method 2: Python Package**
 ```bash
-python scripts/setup_env.py
+pip install route-planner
+route-planner
 ```
 
-### Application Installation
-```bash
-python scripts/install.py
-```
-
-### Running the Application
+**Method 3: Using Launcher Scripts**
 ```bash
 # On Unix/Linux/macOS
 ./scripts/run_route_planner.sh
@@ -47,6 +52,13 @@ python scripts/install.py
 # On Windows
 scripts\run_route_planner.bat
 ```
+
+**Method 4: Direct Execution (Developers)**
+```bash
+python main.py
+```
+
+*Note: All executables and packages are automatically built by GitHub Actions CI/CD.*
 
 ## Windows Build Process
 

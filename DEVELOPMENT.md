@@ -2,6 +2,10 @@
 
 This guide provides detailed information for developers working on or contributing to the Route Planner project.
 
+**🚀 For End Users:** If you just want to use Route Planner, download the pre-built executable from [GitHub Releases](https://github.com/yammanhammad/Route_Planner/releases/latest) - no development setup needed!
+
+*Note: All Windows executables and cross-platform packages are automatically built and published using GitHub Actions CI/CD.*
+
 ## Development Environment Setup
 
 ### Prerequisites
@@ -19,13 +23,19 @@ This guide provides detailed information for developers working on or contributi
 
 2. **Set up environment**
    ```bash
-   python scripts/setup_env.py
+   # Create virtual environment
+   python -m venv .venv
+   
+   # Activate environment
+   # On Windows:
+   .venv\Scripts\activate
+   # On Linux/macOS:
+   source .venv/bin/activate
+   
+   # Install dependencies
+   pip install -r requirements.txt
+   pip install -e .
    ```
-   This script will:
-   - Create a virtual environment
-   - Install dependencies from requirements.txt
-   - Set up pre-commit hooks
-   - Configure development settings
 
 3. **Verify setup**
    ```bash
@@ -37,12 +47,13 @@ This guide provides detailed information for developers working on or contributi
 
 ```
 Route_Planner/
-├── main.py                    # Application launcher
+├── main.py                    # Application entry point
 ├── config.py                  # Configuration settings
 ├── requirements.txt           # Python dependencies
 ├── route_planner.py           # Cross-platform launcher
 ├── route_planner/             # Main application package
 │   ├── __init__.py            # Package initialization
+│   ├── core.py                # Entry point (calls app.py main)
 │   ├── app.py                 # Core application with UI
 │   ├── algorithms/            # Routing algorithms
 │   ├── ui/                    # User interface components
@@ -51,8 +62,6 @@ Route_Planner/
 ├── docs/                      # Documentation
 └── cache/                     # Runtime cache
 ```
-
-See subdirectory READMEs for more detailed information about specific components.
 
 ## Development Workflow
 
@@ -103,14 +112,17 @@ Windows executables are built automatically by GitHub Actions CI/CD:
    - `scripts/installer.nsi` - NSIS installer script
 
 ### Cross-Platform Packages
-For other platforms, use the scripts directory tools:
+For other platforms, you can build packages using:
 
 ```bash
-# Set up development environment
-python scripts/setup_env.py
+# Install build dependencies
+pip install build wheel
 
-# Install package for distribution
-python scripts/install.py
+# Build distribution packages
+python -m build
+
+# Install locally for testing
+pip install -e .
 ```
 
 ## Documentation

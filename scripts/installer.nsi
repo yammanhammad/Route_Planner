@@ -2,7 +2,7 @@
 ;Creates a professional Windows installer with Visual C++ Redistributable
 
 !define APP_NAME "Route Planner"
-!define APP_VERSION "1.1.0"
+!define APP_VERSION "1.1.1"
 !define APP_PUBLISHER "Route Planner Team"
 !define APP_URL "https://github.com/yammanhammad/Route_Planner"
 !define APP_EXECUTABLE "RoutePlanner.exe"

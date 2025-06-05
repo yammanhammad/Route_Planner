@@ -1,14 +1,6 @@
-# 🚚 Route Planner - Delivery Route OptimizFor detailed options and troubleshooting, see the [Windows Guide](docs/WINDOWS_GUIDE.md).
+# 🚚 Route Planner - Delivery Route Optimizer
 
-### Linux 🐧
-```bash
-# Clone and install manually
-git clone https://github.com/yammanhammad/Route_Planner.git
-cd Route_Planner
-python scripts/install.py
-```
-
-Or use the cross-platform installer from scripts directory.Version](https://img.shields.io/badge/version-1.1.0-blue.svg)
+![Version](https://img.shields.io/badge/version-1.1.1-blue.svg)
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
 ![Python](https://img.shields.io/badge/python-3.8%2B-blue.svg)
 ![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20Linux%20%7C%20macOS-lightgrey.svg)
@@ -44,37 +36,71 @@ A sophisticated desktop application for optimizing delivery routes using advance
 
 ## 🚀 Quick Start
 
-### Windows
-1. **Download** `RoutePlanner-Bundled.zip` from [GitHub Releases](https://github.com/yammanhammad/Route_Planner/releases/latest)
-2. **Extract** anywhere on your computer
-3. **Run** `setup.bat` or `RoutePlanner.exe` directly
+Choose the installation method that works best for you. **For non-technical users, we recommend starting with Option 1.**
 
-For detailed options and troubleshooting, see the [Windows Guide](docs/WINDOWS_GUIDE.md).
+### Option 1: 🖥️ Pre-built Executables & Packages (Easiest - No Technical Knowledge Required)
 
-### Linux
-```bash
-curl -sSL https://raw.githubusercontent.com/yammanhammad/Route_Planner/master/linux/quick-install.sh | bash
-```
+**Windows:**
+1. **Download** the latest release from [GitHub Releases](https://github.com/yammanhammad/Route_Planner/releases/latest)
+   - `RoutePlanner-Bundled.zip` (Recommended - includes all dependencies)
+   - `RoutePlanner-Setup.exe` (Traditional installer)
+2. **Extract** (for zip) or **install** (for exe) 
+3. **Run** `RoutePlanner.exe`
 
-For more Linux options, see the [Linux Installation Guide](linux/README.md).
+**Linux/macOS:**
+1. **Download** the cross-platform Python package from [GitHub Releases](https://github.com/yammanhammad/Route_Planner/releases/latest)
+   - `route_planner-1.1.1-py3-none-any.whl` (Recommended)
+   - `route-planner-1.1.1.tar.gz` (Source distribution)
+2. **Install**: `pip install route_planner-1.1.1-py3-none-any.whl`
+3. **Run**: `route-planner`
 
-### macOS
-```bash
-# Install Python 3.8+ if needed
-brew install python3
+✨ *All executables and packages are automatically built and published by our GitHub Actions CI/CD pipeline - no manual compilation needed!*
 
-# Install Route Planner
-pip3 install route-planner
+### Option 2: 📦 Python Package (For Python Users)
 
-# Run the application
-route-planner
-```
-
-### Python (All Platforms)
+**All Platforms:**
 ```bash
 pip install route-planner
 route-planner
 ```
+
+### Option 3: 🔧 From Source (For Developers)
+
+**Linux/macOS:**
+```bash
+git clone https://github.com/yammanhammad/Route_Planner.git
+cd Route_Planner
+pip install -r requirements.txt
+python main.py
+```
+
+**Windows:**
+```bash
+git clone https://github.com/yammanhammad/Route_Planner.git
+cd Route_Planner
+pip install -r requirements.txt
+python main.py
+```
+
+### Option 4: 🚀 Quick Launcher Scripts
+
+**Linux/macOS:**
+```bash
+git clone https://github.com/yammanhammad/Route_Planner.git
+cd Route_Planner
+chmod +x scripts/run_route_planner.sh
+./scripts/run_route_planner.sh
+```
+
+**Windows:**
+```cmd
+git clone https://github.com/yammanhammad/Route_Planner.git
+cd Route_Planner
+scripts\run_route_planner.bat
+```
+
+---
+**📖 Need Help?** See our detailed [Windows Guide](docs/WINDOWS_GUIDE.md) for troubleshooting and advanced options.
 
 ## 📱 How to Use
 
@@ -119,8 +145,8 @@ For a comprehensive guide with screenshots, see the [User Guide](docs/README.md)
 - **Windows Defender warning**: Right-click the exe → "Run as administrator"
 
 **Linux**
-- **Missing dependencies**: Run `python scripts/setup_env.py`
-- **Environment issues**: Use `python scripts/install.py` for automated setup
+- **Missing dependencies**: Run `pip install -r requirements.txt`
+- **Environment issues**: Use the shell script `./scripts/run_route_planner.sh` for automated environment setup
 
 **All Platforms**
 - **Map not loading**: Check internet connection for initial setup

@@ -5,7 +5,28 @@ All notable changes to the Route Planner project will be documented in this file
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+*All Windows executables and cross-platform packages are automatically built and published using GitHub Actions.*
+
+## [1.1.1] - 2025-06-05
+
+### Added
+- Cross-platform Python packages (wheel and source distribution) now available for Linux/macOS users
+- Direct download links for non-technical users on all platforms
+
+### Fixed
+- GitHub Actions workflow now successfully builds and publishes cross-platform packages
+- All platform installation instructions updated to reflect available packages
+
+### Changed
+- Updated documentation to show cross-platform packages are available (not "coming soon")
+- Improved installation guidance for Linux/macOS users
+
 ## [1.1.0] - 2025-06-05
+
+### Added
+- GitHub Actions automated build and release pipeline
+- Cross-platform Python packages (wheel and source distribution) for Linux/macOS
+- Improved installation instructions prioritizing non-technical users
 
 ### Changed
 - Refactored main entry point structure following Python best practices
