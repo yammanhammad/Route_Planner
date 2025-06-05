@@ -1,0 +1,66 @@
+app-id: org.routeplanner.RoutePlanner
+runtime: org.freedesktop.Platform
+runtime-version: '23.08'
+sdk: org.freedesktop.Sdk
+command: route-planner
+finish-args:
+  - --share=network
+  - --share=ipc  
+  - --socket=fallback-x11
+  - --socket=wayland
+  - --device=dri
+  - --filesystem=home
+  - --env=QT_QPA_PLATFORM=wayland;xcb
+
+modules:
+  - name: python3-requirements
+    buildsystem: simple
+    build-commands:
+      - pip3 install --prefix=${FLATPAK_DEST} --no-deps PyQt5 folium networkx osmnx shapely
+    sources: []
+
+  - name: route-planner
+    buildsystem: simple
+    build-commands:
+      - cp -r . ${FLATPAK_DEST}/lib/route-planner/
+      - mkdir -p ${FLATPAK_DEST}/bin
+      - |
+        cat > ${FLATPAK_DEST}/bin/route-planner << 'EOF'
+        #!/bin/bash
+        cd ${FLATPAK_DEST}/lib/route-planner
+        python3 -m route_planner.core "$@"
+        EOF
+      - chmod +x ${FLATPAK_DEST}/bin/route-planner
+      - mkdir -p ${FLATPAK_DEST}/share/applications
+      - |
+        cat > ${FLATPAK_DEST}/share/applications/org.routeplanner.RoutePlanner.desktop << 'EOF'
+        [Desktop Entry]
+        Name=Route Planner
+        Comment=Delivery Route Optimizer
+        Exec=route-planner
+        Icon=org.routeplanner.RoutePlanner
+        Terminal=false
+        Type=Application
+        Categories=Office;
+        EOF
+      - mkdir -p ${FLATPAK_DEST}/share/metainfo
+      - |
+        cat > ${FLATPAK_DEST}/share/metainfo/org.routeplanner.RoutePlanner.metainfo.xml << 'EOF'
+        <?xml version="1.0" encoding="UTF-8"?>
+        <component type="desktop-application">
+          <id>org.routeplanner.RoutePlanner</id>
+          <metadata_license>MIT</metadata_license>
+          <project_license>MIT</project_license>
+          <name>Route Planner</name>
+          <summary>Delivery Route Optimizer</summary>
+          <description>
+            <p>A sophisticated PyQt5-based desktop application for optimizing delivery routes.</p>
+          </description>
+          <categories>
+            <category>Office</category>
+          </categories>
+        </component>
+        EOF
+    sources:
+      - type: dir
+        path: ..
