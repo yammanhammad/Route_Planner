@@ -4,11 +4,26 @@ This document contains all release notes for Route Planner, with the most recent
 
 **🚀 Quick Installation:** Download the latest version from [GitHub Releases](https://github.com/yammanhammad/Route_Planner/releases/latest):
 - **Windows**: Choose `RoutePlanner-Bundled.zip` for the easiest installation experience
-- **Linux/macOS**: Choose `route_planner-1.1.1-py3-none-any.whl` for easy pip installation
+- **Linux/macOS**: Choose the latest `.whl` package for easy pip installation
 
 *All Windows executables and cross-platform packages are automatically built and published using GitHub Actions.*
 
-## Route Planner v1.1.1 (Latest)
+## Route Planner v1.1.2 (Latest)
+
+**Release Date:** June 2025
+
+### 🔧 Version Management Modernization
+- **Dynamic Version Control**: Implemented centralized version management system
+- **Reduced Maintenance Overhead**: Eliminated hardcoded version numbers from documentation
+- **Automated Version Fetching**: All build scripts and documentation now dynamically fetch version from package
+- **Consistency Improvements**: Centralized version control prevents version mismatches
+
+### 📦 Technical Improvements
+- **Build System Enhancement**: Version numbers automatically extracted from `route_planner/__init__.py`
+- **Documentation Cleanup**: Removed version-specific package names from installation instructions
+- **Future-Proof Design**: Version updates now require changes in only one location
+
+## Route Planner v1.1.1
 
 **Release Date:** June 2025
 
@@ -19,7 +34,7 @@ This document contains all release notes for Route Planner, with the most recent
 
 ### 📦 Installation Options
 - **Windows**: Download executable packages (`RoutePlanner-Bundled.zip` or `RoutePlanner-Setup.exe`)
-- **Linux/macOS**: Download Python wheel (`route_planner-1.1.1-py3-none-any.whl`) and install with pip
+- **Linux/macOS**: Download the latest Python wheel package and install with pip
 - **All Platforms**: Standard PyPI installation (`pip install route-planner`) also available
 
 ## Route Planner v1.1.0

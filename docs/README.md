@@ -28,13 +28,13 @@ This directory contains comprehensive documentation for the Route Planner applic
    - Extract/install and run `RoutePlanner.exe`
    
    **Linux/macOS:**
-   - Download `route_planner-1.1.1-py3-none-any.whl` from [GitHub Releases](https://github.com/yammanhammad/Route_Planner/releases/latest)
+   - Download `route_planner-[VERSION]-py3-none-any.whl` from [GitHub Releases](https://github.com/yammanhammad/Route_Planner/releases/latest)
    - Create a virtual environment (recommended):
      ```bash
      python3 -m venv route-planner-env
      source route-planner-env/bin/activate
      ```
-   - Install: `pip install route_planner-1.1.1-py3-none-any.whl`
+   - Install: `pip install route_planner-[VERSION]-py3-none-any.whl`
    - Run: `route-planner`
    
    *✨ All executables and packages are automatically built using GitHub Actions CI/CD - no compilation needed!*

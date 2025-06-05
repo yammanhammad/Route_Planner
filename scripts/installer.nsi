@@ -2,7 +2,10 @@
 ;Creates a professional Windows installer with Visual C++ Redistributable
 
 !define APP_NAME "Route Planner"
-!define APP_VERSION "1.1.1"
+; APP_VERSION will be passed as a command line parameter via /DAPP_VERSION=x.x.x
+!ifndef APP_VERSION
+  !define APP_VERSION "1.1.2"  ; Fallback version
+!endif
 !define APP_PUBLISHER "Route Planner Team"
 !define APP_URL "https://github.com/yammanhammad/Route_Planner"
 !define APP_EXECUTABLE "RoutePlanner.exe"
@@ -53,7 +56,7 @@ RequestExecutionLevel admin
 !insertmacro MUI_LANGUAGE "English"
 
 ;Version Information
-VIProductVersion "1.1.0.0"
+VIProductVersion "${APP_VERSION}.0"
 VIAddVersionKey /LANG=${LANG_ENGLISH} "ProductName" "${APP_NAME}"
 VIAddVersionKey /LANG=${LANG_ENGLISH} "CompanyName" "${APP_PUBLISHER}"
 VIAddVersionKey /LANG=${LANG_ENGLISH} "LegalCopyright" "© 2025 ${APP_PUBLISHER}"

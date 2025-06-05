@@ -1,5 +1,4 @@
 from setuptools import setup, find_packages
-import os
 
 # Read the long description from README.md
 with open("README.md", "r", encoding="utf-8") as fh:
@@ -9,9 +8,20 @@ with open("README.md", "r", encoding="utf-8") as fh:
 with open("requirements.txt", "r", encoding="utf-8") as f:
     requirements = f.read().splitlines()
 
+# Read version from package
+def get_version():
+    """Get version from route_planner/__init__.py"""
+    import re
+    with open("route_planner/__init__.py", "r", encoding="utf-8") as f:
+        content = f.read()
+    match = re.search(r'^__version__ = [\'"]([^\'"]*)[\'"]', content, re.MULTILINE)
+    if match:
+        return match.group(1)
+    raise RuntimeError("Unable to find version string")
+
 setup(
     name="route-planner",
-    version="1.1.1",
+    version=get_version(),
     author="Route Planner Development Team",
     author_email="your.email@example.com",
     description="A PyQt5-based delivery route optimization application",

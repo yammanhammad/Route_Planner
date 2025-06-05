@@ -1,6 +1,6 @@
 # 🚚 Route Planner - Delivery Route Optimizer
 
-![Version](https://img.shields.io/badge/version-1.1.1-blue.svg)
+![Version](https://img.shields.io/github/v/release/yammanhammad/Route_Planner?style=flat&logo=github)
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
 ![Python](https://img.shields.io/badge/python-3.8%2B-blue.svg)
 ![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20Linux%20%7C%20macOS-lightgrey.svg)
@@ -49,7 +49,7 @@ Choose the installation method that works best for you. **For non-technical user
 
 **Linux/macOS:**
 1. **Download** the cross-platform Python package from [GitHub Releases](https://github.com/yammanhammad/Route_Planner/releases/latest)
-   - `route_planner-1.1.1-py3-none-any.whl` (Recommended)
+   - `route_planner-[VERSION]-py3-none-any.whl` (Recommended)
    - `install.py` (Automatic installer script)
 2. **Easy Installation** (Recommended):
    ```bash
@@ -61,7 +61,7 @@ Choose the installation method that works best for you. **For non-technical user
    ```bash
    python3 -m venv route-planner-env
    source route-planner-env/bin/activate
-   pip install route_planner-1.1.1-py3-none-any.whl
+   pip install route_planner-[VERSION]-py3-none-any.whl
    ```
 4. **Run**: 
    - Find "Route Planner" in your application menu

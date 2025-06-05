@@ -372,9 +372,13 @@ jobs:
         
     - name: Create ZIP package
       run: |
-        # Get version from tag or use default
-        $version = "${{ github.ref_name }}" -replace '^v', ''
-        if (!$version -or $version -eq "master") { $version = "1.0.3" }
+        # Get version from Python package
+        $version = python -c "import sys; sys.path.insert(0, '.'); from route_planner import __version__; print(__version__)"
+        if (!$version) { 
+          # Fallback: try to get from git tag
+          $version = "${{ github.ref_name }}" -replace '^v', ''
+          if (!$version -or $version -eq "master") { $version = "1.1.2" }
+        }
         
         # Create ZIP file
         $zipName = "RoutePlanner-$version-Windows-Portable.zip"

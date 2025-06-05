@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 *All Windows executables and cross-platform packages are automatically built and published using GitHub Actions.*
 
+## [1.1.2] - 2025-06-05
+
+### Changed
+- **Dynamic Version Management**: Implemented dynamic version fetching across all documentation and build scripts
+- **Reduced Maintenance Overhead**: Removed hardcoded version numbers from installation instructions and documentation
+- **Centralized Version Control**: All version references now dynamically fetch from `route_planner/__init__.py`
+
+### Fixed
+- Eliminated version inconsistencies across documentation files
+- Improved maintainability by centralizing version management
+
 ## [1.1.1] - 2025-06-05
 
 ### Added

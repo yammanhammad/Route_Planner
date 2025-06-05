@@ -44,7 +44,7 @@ These scripts serve three main functions:
 **Method 1: Pre-built Executables & Packages (Easiest)**
 - Download from [GitHub Releases](https://github.com/yammanhammad/Route_Planner/releases/latest)
 - **Windows**: Run `RoutePlanner.exe` 
-- **Linux/macOS**: Install `route_planner-1.1.1-py3-none-any.whl` with pip and run `route-planner`
+- **Linux/macOS**: Install the latest `.whl` package with pip and run `route-planner`
 - *No technical setup required!*
 
 **Method 2: Python Package**

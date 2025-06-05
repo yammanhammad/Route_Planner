@@ -56,7 +56,7 @@ Dependencies:
 
 Author: Route Planner Development Team
 License: MIT
-Version: 1.0.3
+Version: Dynamic (from package __version__)
 """
 
 # =============================================================================
@@ -95,6 +95,12 @@ from shapely.geometry import box  # Geometric operations for bounding box calcul
 import urllib.request      # URL handling for internet connectivity checks
 import urllib.error       # URL error handling
 import socket             # Low-level networking interface
+
+# Version information
+try:
+    from route_planner import __version__
+except ImportError:
+    __version__ = "unknown"
 
 # =============================================================================
 # CONFIGURATION AND CONSTANTS
@@ -3564,10 +3570,10 @@ class PlannerUI(QtWidgets.QMainWindow):
         QtWidgets.QMessageBox.about(
             self,
             "About Route Planner",
-            """
+            f"""
             <div style="font-family: Arial, sans-serif; max-width: 500px;">
                 <h2 style="color: #4a86e8; margin-bottom: 10px;">Delivery Route Planner</h2>
-                <p style="font-size: 14px; color: #666;"><b>Version 1.0.3</b> (June 2025)</p>
+                <p style="font-size: 14px; color: #666;"><b>Version {__version__}</b> (June 2025)</p>
                 
                 <p style="margin-top: 15px; line-height: 1.4;">
                     A sophisticated application for optimizing delivery routes through advanced
@@ -4254,7 +4260,7 @@ def main():
     
     # Set application properties
     app.setApplicationName("Delivery Route Planner")
-    app.setApplicationVersion("1.0.3")
+    app.setApplicationVersion(__version__)
     app.setOrganizationName("Route Optimization Solutions")
     
     # Create and show main window
