@@ -114,9 +114,6 @@ jobs:
             dist/RoutePlanner.exe
             dist/RoutePlanner-*.zip
           retention-days: 30
-          path: |
-            dist/RoutePlanner.exe
-            dist/RoutePlanner-*.zip
           
   build-python-package:
     name: Build Python Package

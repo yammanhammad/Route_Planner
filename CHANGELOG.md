@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 *All Windows executables and cross-platform packages are automatically built and published using GitHub Actions.*
 
+## [1.1.4] - 2025-06-06
+
+### Changed
+- **Optimized GitHub Actions Workflow**: Updated to latest action versions and improved performance
+- **Enhanced Security**: Added proper permissions and error handling to CI/CD pipeline
+- **Improved Build Efficiency**: Better caching strategy and reduced workflow execution time
+- **Modern Release Process**: Replaced deprecated upload methods with modern gh CLI
+
+### Technical Improvements
+- Updated to checkout@v4, setup-python@v5, and other latest action versions
+- Enhanced cross-platform build optimization and reliability
+- Streamlined release asset upload process
+
 ## [1.1.3] - 2025-06-05
 
 ### Added

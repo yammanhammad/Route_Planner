@@ -6,7 +6,7 @@ A PyQt5-based delivery route optimization application with interactive map visua
 and comprehensive offline support.
 """
 
-__version__ = "1.1.3"
+__version__ = "1.1.4"
 __author__ = "Route Planner Development Team"
 
 # Ensure config is available at package level
