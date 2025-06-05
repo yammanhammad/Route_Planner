@@ -51,8 +51,15 @@ Choose the installation method that works best for you. **For non-technical user
 1. **Download** the cross-platform Python package from [GitHub Releases](https://github.com/yammanhammad/Route_Planner/releases/latest)
    - `route_planner-1.1.1-py3-none-any.whl` (Recommended)
    - `route-planner-1.1.1.tar.gz` (Source distribution)
-2. **Install**: `pip install route_planner-1.1.1-py3-none-any.whl`
-3. **Run**: `route-planner`
+2. **Create a virtual environment** (recommended to avoid conflicts):
+   ```bash
+   python3 -m venv route-planner-env
+   source route-planner-env/bin/activate
+   ```
+3. **Install**: `pip install route_planner-1.1.1-py3-none-any.whl`
+4. **Run**: `route-planner`
+
+💡 *To use the app later, just activate the environment again: `source route-planner-env/bin/activate`, then run `route-planner`*
 
 ✨ *All executables and packages are automatically built and published by our GitHub Actions CI/CD pipeline - no manual compilation needed!*
 
