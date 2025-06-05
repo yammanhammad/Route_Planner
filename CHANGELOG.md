@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 *All Windows executables and cross-platform packages are automatically built and published using GitHub Actions.*
 
+## [1.1.6] - 2025-06-06
+
+### Changed
+- **Workflow Consolidation**: Merged all platform builds into single cross-platform workflow following global standards
+- **Improved Maintainability**: Removed duplicate Windows workflow, aligning with industry best practices
+- **Better Resource Efficiency**: Optimized GitHub Actions usage with consolidated build process
+- **Atomic Releases**: All platforms now build together ensuring consistency across releases
+
+### Fixed
+- **Ubuntu Version**: Updated to ubuntu-22.04 to resolve scheduled retirement warnings
+- **Flatpak Manifest**: Fixed YAML syntax errors and command references
+- **Workflow Standards**: Aligned with best practices used by major projects (VS Code, Docker, Kubernetes)
+
 ## [1.1.5] - 2025-06-06
 
 ### Fixed
