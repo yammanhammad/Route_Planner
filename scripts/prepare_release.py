@@ -37,6 +37,34 @@ def update_version(new_version):
     print(f"✅ Updated version to {new_version} in {init_file}")
     return True
 
+def update_nsis_fallback_version(new_version):
+    """Update fallback version in scripts/installer.nsi"""
+    nsis_file = Path("scripts") / "installer.nsi"
+    
+    if not nsis_file.exists():
+        print(f"❌ Error: {nsis_file} not found")
+        return False
+    
+    with open(nsis_file, 'r', encoding='utf-8') as f:
+        content = f.read()
+    
+    # Update fallback version in NSIS installer
+    updated_content = re.sub(
+        r'!define APP_VERSION "[^"]*"  ; Fallback version - should be updated by scripts/prepare_release\.py',
+        f'!define APP_VERSION "{new_version}"  ; Fallback version - should be updated by scripts/prepare_release.py',
+        content
+    )
+    
+    if content == updated_content:
+        print(f"✅ NSIS fallback version already set to {new_version}")
+        return True
+    
+    with open(nsis_file, 'w', encoding='utf-8') as f:
+        f.write(updated_content)
+    
+    print(f"✅ Updated NSIS fallback version to {new_version} in {nsis_file}")
+    return True
+
 def add_changelog_entry(version):
     """Add a new entry to CHANGELOG.md"""
     changelog_file = Path("CHANGELOG.md")
@@ -157,6 +185,7 @@ def main():
     
     success = True
     success &= update_version(new_version)
+    success &= update_nsis_fallback_version(new_version)
     success &= add_changelog_entry(new_version)
     success &= add_release_notes_entry(new_version)
     

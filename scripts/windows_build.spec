@@ -12,6 +12,15 @@ from pathlib import Path
 project_root = Path(SPECPATH).parent
 route_planner_dir = project_root / "route_planner"
 
+# Generate version info file dynamically
+sys.path.insert(0, str(project_root / "scripts"))
+try:
+    from version_info import generate_version_file
+    version_file_path = generate_version_file()
+except ImportError:
+    print("Warning: Could not import version_info, version file will not be included")
+    version_file_path = None
+
 # Data files to include
 added_files = [
     (str(project_root / "main.py"), "."),
@@ -115,7 +124,7 @@ exe = EXE(
     codesign_identity=None,
     entitlements_file=None,
     icon=str(project_root / "icon.ico") if (project_root / "icon.ico").exists() else None,
-    version_file=None,
+    version_file=version_file_path,
     # Key settings for fixing ucrtbase.dll.crealf issue
     exclude_binaries=False,
     manifest=None,  # Let PyInstaller handle manifest automatically

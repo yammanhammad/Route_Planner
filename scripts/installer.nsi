@@ -3,8 +3,9 @@
 
 !define APP_NAME "Route Planner"
 ; APP_VERSION will be passed as a command line parameter via /DAPP_VERSION=x.x.x
+; The build script should extract version dynamically and pass it here
 !ifndef APP_VERSION
-  !define APP_VERSION "1.1.2"  ; Fallback version
+  !define APP_VERSION "1.1.2"  ; Fallback version - should be updated by scripts/prepare_release.py
 !endif
 !define APP_PUBLISHER "Route Planner Team"
 !define APP_URL "https://github.com/yammanhammad/Route_Planner"

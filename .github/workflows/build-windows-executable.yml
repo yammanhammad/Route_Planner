@@ -377,7 +377,15 @@ jobs:
         if (!$version) { 
           # Fallback: try to get from git tag
           $version = "${{ github.ref_name }}" -replace '^v', ''
-          if (!$version -or $version -eq "master") { $version = "1.1.2" }
+          if (!$version -or $version -eq "master") { 
+            # Ultimate fallback: extract from package file directly
+            $version = (Get-Content "route_planner/__init__.py" | Select-String '__version__ = ["\']([^"\']*)["\']').Matches[0].Groups[1].Value
+            if (!$version) { 
+              # Final fallback: use scripts/get_version.py
+              $version = python scripts/get_version.py
+              if (!$version) { $version = "1.1.2" }  # Absolute final fallback
+            }
+          }
         }
         
         # Create ZIP file
