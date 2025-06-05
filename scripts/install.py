@@ -4,8 +4,7 @@ Route Planner Installation Script
 =================================
 
 This script automates the installation process for Route Planner.
-It sets up a virtual environment, installs dependencies,
-and creates desktop shortcuts if possible.
+It now uses the UniversalInstaller for enhanced cross-platform support.
 """
 
 import os
@@ -15,6 +14,13 @@ import sys
 import site
 import shutil
 from pathlib import Path
+
+# Try to import our universal installer
+try:
+    from universal_installer import UniversalInstaller
+    UNIVERSAL_INSTALLER = True
+except ImportError:
+    UNIVERSAL_INSTALLER = False
 
 def is_admin():
     """Check if the script is running with administrator privileges."""
@@ -33,8 +39,7 @@ def create_desktop_shortcut(app_path):
         home = Path.home()
         if platform.system() == 'Windows':
             desktop = home / 'Desktop'
-            # Create a .lnk file (requires win32com which we don't want to add as a dependency)
-            # Instead create a batch file
+            # Create a batch file
             shortcut_path = desktop / 'Route Planner.bat'
             with open(shortcut_path, 'w') as f:
                 f.write(f'@echo off\nstart "" "{app_path}"')
@@ -59,20 +64,36 @@ Categories=Office;
             desktop = home / 'Desktop'
             shortcut_path = desktop / 'Route Planner.command'
             with open(shortcut_path, 'w') as f:
-                f.write(f"""#!/bin/bash
-"{app_path}"
-""")
+                f.write(f'#!/bin/bash\n"{app_path}"\n')
             os.chmod(shortcut_path, 0o755)
             return True
+        return False
     except Exception as e:
         print(f"Warning: Could not create desktop shortcut: {e}")
-    return False
+        return False
 
 def main():
     """Main installation function."""
-    print("╔════════════════════════════════════════╗")
-    print("║    Route Planner Installation Tool     ║")
-    print("╚════════════════════════════════════════╝")
+    print("╔════════════════════════════════════╗")
+    print("║    Route Planner Installation Tool ║")
+    print("╚════════════════════════════════════╝")
+    
+    # Check if universal installer is available
+    if UNIVERSAL_INSTALLER:
+        print("\n✨ Using enhanced cross-platform installer")
+        
+        # Determine installation mode
+        global_install = len(sys.argv) > 1 and sys.argv[1] == '--global' and is_admin()
+        
+        # Create and run universal installer
+        installer = UniversalInstaller(global_install=global_install)
+        success = installer.install()
+        
+        # Return appropriate exit code
+        return 0 if success else 1
+    
+    # Legacy installer code if universal installer is not available
+    print("\n⚠️ Enhanced installer not available, using legacy installer")
     
     # Determine installation mode
     if len(sys.argv) > 1 and sys.argv[1] == '--global' and is_admin():
@@ -100,7 +121,7 @@ def main():
         print("✅ Package installed successfully!")
         
         # Create shortcut if possible
-        if 'route-planner' in site.USER_BASE:
+        if site.USER_BASE and 'route-planner' in str(site.USER_BASE):
             bin_dir = Path(site.USER_BASE) / ('Scripts' if platform.system() == 'Windows' else 'bin')
             app_path = bin_dir / ('route-planner.exe' if platform.system() == 'Windows' else 'route-planner')
             if app_path.exists():
@@ -112,13 +133,14 @@ def main():
         print("1. Running 'route-planner' from the command line")
         print("2. Using the desktop shortcut (if created)")
         print("3. Running route_planner.py from the project directory")
+        return 0
         
     except subprocess.CalledProcessError as e:
         print(f"❌ Installation failed: {e}")
-        sys.exit(1)
+        return 1
     except Exception as e:
         print(f"❌ An unexpected error occurred: {e}")
-        sys.exit(1)
+        return 1
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())

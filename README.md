@@ -32,9 +32,10 @@ A sophisticated desktop application for optimizing delivery routes using advance
 - **📱 User-Friendly Interface** with guided tutorials and dark theme
 - **💾 Offline Support** with intelligent caching system
 - **⚡ Multithreaded Processing** keeps interface responsive
-- **🔧 Cross-Platform** - Windows, macOS, and Linux support
-
-## 🚀 Quick Start
+- **�️ Cross-Platform Support**:
+  - **Windows**: Native executable with auto-update
+  - **Linux**: AppImage and Flatpak formats for all distributions
+  - **macOS**: Universal installer with desktop integration
 
 Choose the installation method that works best for you. **For non-technical users, we recommend starting with Option 1.**
 
@@ -47,11 +48,43 @@ Choose the installation method that works best for you. **For non-technical user
 2. **Extract** (for zip) or **install** (for exe) 
 3. **Run** `RoutePlanner.exe`
 
-**Linux/macOS:**
-1. **Download** the cross-platform Python package from [GitHub Releases](https://github.com/yammanhammad/Route_Planner/releases/latest)
-   - `route_planner-[VERSION]-py3-none-any.whl` (Recommended)
+💡 *Our universal installer automatically creates desktop shortcuts and application menu entries!*
+
+✨ *All executables and packages (Windows .exe, Linux AppImage/Flatpak, Python wheels) are automatically built and published by our GitHub Actions CI/CD pipeline - no manual compilation needed!*
+
+**Linux:**
+1. **Choose your preferred format:**
+   - `RoutePlanner-AppImage.AppImage` - Portable, runs anywhere (recommended)
+   - `RoutePlanner-Flatpak.flatpak` - Sandboxed, better system integration
+   - `route_planner-[VERSION]-py3-none-any.whl` - Python package
+2. **AppImage** (easiest):
+   ```bash
+   # Download from GitHub Releases
+   chmod +x RoutePlanner-AppImage.AppImage
+   ./RoutePlanner-AppImage.AppImage
+   ```
+3. **Flatpak**:
+   ```bash
+   # Install from file
+   flatpak install RoutePlanner-Flatpak.flatpak
+   # Run
+   flatpak run org.routeplanner.RoutePlanner
+   ```
+4. **Universal Installer** (automatic setup):
+   ```bash
+   python3 install.py
+   ```
+   This detects your Linux environment and installs appropriately.
+
+5. **Run**: 
+   - Find "Route Planner" in your application menu
+   - Or run: `route-planner` from terminal
+
+**macOS:**
+1. **Download** from [GitHub Releases](https://github.com/yammanhammad/Route_Planner/releases/latest):
+   - `route_planner-[VERSION]-py3-none-any.whl` (Python package)
    - `install.py` (Automatic installer script)
-2. **Easy Installation** (Recommended):
+2. **Universal Installer** (Recommended):
    ```bash
    python3 install.py
    ```
@@ -64,12 +97,8 @@ Choose the installation method that works best for you. **For non-technical user
    pip install route_planner-[VERSION]-py3-none-any.whl
    ```
 4. **Run**: 
-   - Find "Route Planner" in your application menu
+   - Find "Route Planner" in your Applications folder
    - Or run: `route-planner` from terminal
-
-💡 *The easy installer creates desktop shortcuts and application menu entries automatically!*
-
-✨ *All executables and packages are automatically built and published by our GitHub Actions CI/CD pipeline - no manual compilation needed!*
 
 ### Option 2: 📦 Python Package (For Python Users)
 
@@ -160,8 +189,10 @@ For a comprehensive guide with screenshots, see the [User Guide](docs/README.md)
 - **Windows Defender warning**: Right-click the exe → "Run as administrator"
 
 **Linux**
-- **Missing dependencies**: Run `pip install -r requirements.txt`
-- **Environment issues**: Use the shell script `./scripts/run_route_planner.sh` for automated environment setup
+- **Missing dependencies**: Use AppImage (no dependencies required) or `pip install -r requirements.txt`
+- **Permission denied**: Run `chmod +x RoutePlanner-AppImage.AppImage` for AppImages
+- **Environment issues**: Use the universal installer `python3 install.py` for automated setup
+- **Sandboxing issues**: If using Flatpak, add permissions: `flatpak override org.routeplanner.RoutePlanner --filesystem=home`
 
 **All Platforms**
 - **Map not loading**: Check internet connection for initial setup

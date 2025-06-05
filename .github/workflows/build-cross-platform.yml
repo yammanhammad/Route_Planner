@@ -1,0 +1,276 @@
+name: Build Cross-Platform Packages
+
+on:
+  workflow_dispatch:
+  release:
+    types: [created, edited]
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build-windows:
+    name: Build Windows Executable
+    runs-on: windows-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+          cache: 'pip'
+          
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements_windows_build.txt
+          
+      - name: Build executable
+        shell: pwsh
+        run: |
+          # Get version dynamically
+          $versionOutput = python scripts/get_version.py
+          $version = $versionOutput.Trim()
+          echo "Building Windows executable for Route Planner v$version"
+          
+          # Build using PyInstaller spec
+          pyinstaller scripts/windows_build.spec
+          
+      - name: Verify executable
+        run: |
+          if (Test-Path "dist\RoutePlanner.exe") {
+            $size = (Get-Item "dist\RoutePlanner.exe").Length / 1MB
+            Write-Output "✅ Executable created successfully: $([math]::Round($size, 1)) MB"
+          } else {
+            Write-Error "❌ Executable not found!"
+            exit 1
+          }
+          
+      - name: Create bundled package
+        run: |
+          # Download Visual C++ Redistributable
+          $vcredistUrl = "https://aka.ms/vs/17/release/vc_redist.x64.exe"
+          $vcredistPath = "dist\RoutePlanner_Bundled\vc_redist.x64.exe"
+          
+          # Create directory structure
+          New-Item -ItemType Directory -Path "dist\RoutePlanner_Bundled" -Force
+          
+          # Copy files
+          Copy-Item "dist\RoutePlanner.exe" "dist\RoutePlanner_Bundled\"
+          Copy-Item "README.md" "dist\RoutePlanner_Bundled\"
+          Copy-Item "LICENSE" "dist\RoutePlanner_Bundled\" -ErrorAction SilentlyContinue
+          
+          # Download VC++ Redistributable
+          Invoke-WebRequest -Uri $vcredistUrl -OutFile $vcredistPath
+          
+          # Create setup script
+          $setupScript = @"
+@echo off
+echo Installing Route Planner...
+echo.
+echo Step 1: Installing Visual C++ Redistributable...
+start /wait vc_redist.x64.exe /quiet /norestart
+if %ERRORLEVEL% NEQ 0 (
+    echo Warning: Visual C++ Redistributable installation may have failed.
+    echo If the app doesn't work, run vc_redist.x64.exe manually.
+)
+echo.
+echo Step 2: Starting Route Planner...
+start RoutePlanner.exe
+echo.
+echo Setup complete! Route Planner should now be running.
+pause
+"@
+          
+          $setupScript | Out-File -FilePath "dist\RoutePlanner_Bundled\setup.bat" -Encoding ASCII
+          
+          # Create zip file
+          $version = python scripts/get_version.py
+          Compress-Archive -Path "dist\RoutePlanner_Bundled\*" -DestinationPath "dist\RoutePlanner-$version-Bundled.zip" -Force
+          
+          # Output success message
+          Write-Output "✅ Bundled package created successfully: dist\RoutePlanner-$version-Bundled.zip"
+          
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: windows-executable
+          path: |
+            dist/RoutePlanner.exe
+            dist/RoutePlanner-*.zip
+          
+  build-python-package:
+    name: Build Python Package
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+          cache: 'pip'
+          
+      - name: Install build dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install build wheel
+          
+      - name: Build package
+        run: |
+          python -m build
+          
+      - name: List built packages
+        run: |
+          ls -l dist/
+          
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: python-package
+          path: dist/*.whl
+          
+  build-appimage:
+    name: Build Linux AppImage
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+          cache: 'pip'
+          
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pillow
+          
+      - name: Install AppImage tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y wget fuse
+          wget -q https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage -O appimagetool
+          chmod +x appimagetool
+          sudo mv appimagetool /usr/local/bin/
+          
+      - name: Build AppImage
+        run: |
+          python scripts/build_appimage.py
+          
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: linux-appimage
+          path: build/appimage/RoutePlanner-*.AppImage
+          
+  build-flatpak:
+    name: Build Linux Flatpak
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+          cache: 'pip'
+          
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          
+      - name: Install Flatpak tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y flatpak flatpak-builder
+          sudo flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+          sudo flatpak install -y flathub org.freedesktop.Platform//23.08 org.freedesktop.Sdk//23.08
+          
+      - name: Build Flatpak
+        run: |
+          python scripts/build_flatpak.py
+          
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: linux-flatpak
+          path: RoutePlanner-*.flatpak
+          
+  upload-to-release:
+    name: Upload to Release
+    needs: [build-windows, build-python-package, build-appimage, build-flatpak]
+    runs-on: ubuntu-latest
+    if: github.event_name == 'release' || github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v3
+        with:
+          path: artifacts
+          
+      - name: Display structure of artifacts
+        run: ls -R artifacts/
+        
+      - name: Get release info
+        id: get_release
+        uses: bruceadams/get-release@v1.3.2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: Upload Windows executable to release
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.get_release.outputs.upload_url }}
+          asset_path: artifacts/windows-executable/RoutePlanner.exe
+          asset_name: RoutePlanner.exe
+          asset_content_type: application/octet-stream
+          
+      - name: Upload Windows bundled package to release
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.get_release.outputs.upload_url }}
+          asset_path: artifacts/windows-executable/RoutePlanner-*.zip
+          asset_name: RoutePlanner-Bundled.zip
+          asset_content_type: application/zip
+          
+      - name: Upload Python wheel to release
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.get_release.outputs.upload_url }}
+          asset_path: artifacts/python-package/*.whl
+          asset_name: route_planner-python-package.whl
+          asset_content_type: application/octet-stream
+          
+      - name: Upload Linux AppImage to release
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.get_release.outputs.upload_url }}
+          asset_path: artifacts/linux-appimage/RoutePlanner-*.AppImage
+          asset_name: RoutePlanner-AppImage.AppImage
+          asset_content_type: application/octet-stream
+          
+      - name: Upload Linux Flatpak to release
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.get_release.outputs.upload_url }}
+          asset_path: artifacts/linux-flatpak/RoutePlanner-*.flatpak
+          asset_name: RoutePlanner-Flatpak.flatpak
+          asset_content_type: application/octet-stream

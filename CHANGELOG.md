@@ -9,14 +9,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.1.2] - 2025-06-05
 
+### Added
+- **Enhanced Cross-Platform Packaging**: Added comprehensive Flatpak support with build scripts and CI/CD integration
+- **Intelligent Platform Detection**: Enhanced PlatformManager with detailed Linux packaging format detection and recommendations
+- **Universal Installer**: Improved universal installer with robust platform detection, logging, and test mode
+- **Modern Linux Packaging**: Added support for AppImage, Flatpak, and Snap detection and recommendations
+
 ### Changed
 - **Dynamic Version Management**: Implemented dynamic version fetching across all documentation and build scripts
 - **Reduced Maintenance Overhead**: Removed hardcoded version numbers from installation instructions and documentation
 - **Centralized Version Control**: All version references now dynamically fetch from `route_planner/__init__.py`
+- **Enhanced CI/CD Pipeline**: Updated GitHub Actions workflow to build and publish Flatpak packages alongside existing formats
+- **Consolidated Documentation**: Removed redundant documentation and consolidated installation instructions
 
 ### Fixed
 - Eliminated version inconsistencies across documentation files
 - Improved maintainability by centralizing version management
+- Fixed syntax and indentation errors in installation scripts
+- Resolved documentation discrepancies and outdated information
 
 ## [1.1.1] - 2025-06-05
 

@@ -12,6 +12,17 @@ This document contains all release notes for Route Planner, with the most recent
 
 **Release Date:** June 2025
 
+### 🎯 Enhanced Cross-Platform Support & Packaging
+
+This release significantly enhances the Route Planner's cross-platform installation and packaging capabilities with intelligent platform detection and modern Linux packaging support.
+
+**Key Enhancements:**
+- **🚀 Comprehensive Flatpak Support**: Full Flatpak packaging with automated build scripts and CI/CD integration
+- **🔍 Intelligent Platform Detection**: Enhanced PlatformManager with detailed Linux packaging format detection
+- **⚙️ Universal Installer Improvements**: Robust platform detection, logging capabilities, and test mode for safe verification
+- **📦 Modern Linux Packaging**: Support for AppImage, Flatpak, and Snap detection with format recommendations
+- **📚 Consolidated Documentation**: Removed redundant docs and improved installation instructions
+
 ### 🔧 Version Management Modernization
 - **Dynamic Version Control**: Implemented centralized version management system
 - **Reduced Maintenance Overhead**: Eliminated hardcoded version numbers from documentation
@@ -19,9 +30,11 @@ This document contains all release notes for Route Planner, with the most recent
 - **Consistency Improvements**: Centralized version control prevents version mismatches
 
 ### 📦 Technical Improvements
+- **Enhanced CI/CD Pipeline**: Updated GitHub Actions to build and publish multiple package formats
 - **Build System Enhancement**: Version numbers automatically extracted from `route_planner/__init__.py`
 - **Documentation Cleanup**: Removed version-specific package names from installation instructions
 - **Future-Proof Design**: Version updates now require changes in only one location
+- **Code Quality**: Fixed syntax errors and improved error handling in installation scripts
 
 ## Route Planner v1.1.1
 
