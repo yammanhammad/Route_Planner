@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 *All Windows executables and cross-platform packages are automatically built and published using GitHub Actions.*
 
+## [1.1.5] - 2025-06-06
+
+### Fixed
+- **YAML Syntax Errors**: Fixed duplicate entries in GitHub Actions workflow causing build failures
+- **Documentation Standards**: Removed inappropriate optimization summary file following Python best practices
+- **Workflow Validation**: All YAML files now pass syntax validation and are deployment-ready
+
+### Changed
+- **Cleaner Repository**: Maintained standard Python documentation structure without ad-hoc files
+
 ## [1.1.4] - 2025-06-06
 
 ### Changed
