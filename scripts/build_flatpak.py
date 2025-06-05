@@ -115,21 +115,18 @@ def create_flatpak_manifest():
         ],
         "modules": [
             {
-                "name": "python-deps",
-                "buildsystem": "simple",
-                "build-commands": [
-                    "pip3 install --prefix=/app --no-deps " + " ".join(dependencies)
-                ],
-                "sources": []
-            },
-            {
                 "name": "route-planner",
                 "buildsystem": "simple",
                 "build-commands": [
-                    "pip3 install --prefix=/app --no-deps .",
-                    "install -Dm755 scripts/flatpak-run.sh /app/bin/route-planner",
+                    "cp -r . /app/lib/route-planner/",
+                    "mkdir -p /app/bin",
+                    "echo '#!/bin/bash' > /app/bin/route-planner",
+                    "echo 'cd /app/lib/route-planner' >> /app/bin/route-planner",
+                    "echo 'export PYTHONPATH=/app/lib/route-planner:$PYTHONPATH' >> /app/bin/route-planner",
+                    "echo 'python3 -c \"import sys; sys.path.insert(0, \\\"/app/lib/route-planner\\\"); from route_planner.core import main; main()\" \"$@\"' >> /app/bin/route-planner",
+                    "chmod +x /app/bin/route-planner",
                     "install -Dm644 flatpak/org.routeplanner.RoutePlanner.desktop /app/share/applications/org.routeplanner.RoutePlanner.desktop",
-                    "install -Dm644 icon.png /app/share/icons/hicolor/256x256/apps/org.routeplanner.RoutePlanner.png"
+                    "mkdir -p /app/share/icons/hicolor/256x256/apps"
                 ],
                 "sources": [
                     {
@@ -198,7 +195,7 @@ def build_flatpak(dry_run=False):
     
     # Create manifest if it doesn't exist
     manifest_file = project_root / "flatpak" / "org.routeplanner.RoutePlanner.yml"
-    if not manifest_file.exists() or dry_run:
+    if not manifest_file.exists():
         print("Creating Flatpak manifest...")
         if not dry_run:
             manifest_file = create_flatpak_manifest()
@@ -206,6 +203,8 @@ def build_flatpak(dry_run=False):
             # For dry run, just show what would be created
             print(f"Would create manifest at: {project_root / 'flatpak' / 'org.routeplanner.RoutePlanner.yml'}")
             print("Would create desktop file and launcher script")
+    else:
+        print(f"Using existing Flatpak manifest: {manifest_file}")
     
     # Build Flatpak
     if not dry_run:
