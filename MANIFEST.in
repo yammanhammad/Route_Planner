@@ -17,3 +17,7 @@ prune logs
 prune build
 prune dist
 prune *.egg-info
+prune */.venv
+prune .venv
+global-exclude *.pyc
+global-exclude __pycache__

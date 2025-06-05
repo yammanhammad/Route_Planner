@@ -8,8 +8,6 @@ Thank you for your interest in contributing to Route Planner! This document prov
 
 ## Getting Started
 
-## Getting Started
-
 ### 🚀 Quick Setup (Recommended for Contributors)
 ```bash
 # Clone and setup in one go

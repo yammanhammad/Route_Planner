@@ -1,10 +1,15 @@
 #!/usr/bin/env python3
 """
-Route Planner Launcher
-======================
+Route Planner Cross-Platform Launcher
+=====================================
 
-This script detects the operating system and launches the appropriate script.
-It uses the paths module for cross-platform compatibility.
+This script provides cross-platform compatibility and path detection.
+Use this for:
+- Cross-platform execution: python route_planner.py
+- Systems where main.py might have issues
+- Advanced users who need platform detection
+
+Most users should use the installed 'route-planner' command instead.
 """
 
 import os

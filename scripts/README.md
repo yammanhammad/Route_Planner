@@ -2,6 +2,15 @@
 
 This directory contains essential utility scripts for building, installing, and running the Route Planner application.
 
+## Entry Point Clarification
+
+The Route Planner has multiple entry points for different use cases:
+
+- **`route-planner`** (installed command) - **Recommended for end users**
+- **`../main.py`** - Development and direct execution
+- **`../route_planner.py`** - Cross-platform launcher with path detection
+- **`run_route_planner.sh/bat`** - Platform-specific with environment setup
+
 ## Overview
 
 These scripts serve three main functions:

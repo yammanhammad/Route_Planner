@@ -18,8 +18,6 @@ This directory contains comprehensive documentation for the Route Planner applic
 
 ### Getting Started
 
-### Getting Started
-
 **Choose the installation method that works best for you:**
 
 1. **🖥️ Pre-built Executables & Packages (Easiest - Recommended for Non-Technical Users)**

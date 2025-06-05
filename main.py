@@ -1,10 +1,15 @@
 #!/usr/bin/env python3
 """
-Route Planner - Main Entry Point
-===============================
+Route Planner - Primary Entry Point
+===================================
 
-This script is the main entry point for the Route Planner application.
-It handles environment setup and launches the application.
+This is the main development and direct execution entry point.
+Use this for:
+- Development and testing
+- Direct Python execution: python main.py
+- IDE integration
+
+For end-users, see the installation guide for easier methods.
 """
 import sys
 import subprocess
