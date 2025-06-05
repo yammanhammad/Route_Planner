@@ -154,7 +154,7 @@ jobs:
           
   build-appimage:
     name: Build Linux AppImage
-    runs-on: ubuntu-20.04  # Use older Ubuntu for better compatibility
+    runs-on: ubuntu-22.04  # Updated from 20.04 due to retirement
     needs: get-version
     steps:
       - name: Checkout code
