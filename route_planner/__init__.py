@@ -1,5 +1,7 @@
 """
-Route Planner Package
+Route Planner Pack    except (subprocess.CalledProcessError, FileNotFoundError, ImportError):
+        # Fallback for environments without git or in packaged distributions
+        return "1.1.15"
 =====================
 
 A PyQt5-based delivery route optimization application with interactive map visualization 
@@ -22,7 +24,7 @@ def _get_version():
         return result.stdout.strip().lstrip('v')
     except (subprocess.CalledProcessError, FileNotFoundError, ImportError):
         # Fallback for environments without git or in packaged distributions
-        return "1.1.12"
+        return "1.1.13"
 
 __version__ = _get_version()
 __author__ = "Route Planner Development Team"

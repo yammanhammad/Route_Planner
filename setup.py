@@ -37,7 +37,7 @@ def get_version():
         return version.lstrip('v')
     
     # Fallback version (must match package fallback)
-    return "1.1.12"
+    return "1.1.15"
 
 setup(
     name="route-planner",
