@@ -22,7 +22,7 @@ def _get_version():
         return result.stdout.strip().lstrip('v')
     except (subprocess.CalledProcessError, FileNotFoundError, ImportError):
         # Fallback for environments without git or in packaged distributions
-        return "1.1.11"
+        return "1.1.12"
 
 __version__ = _get_version()
 __author__ = "Route Planner Development Team"

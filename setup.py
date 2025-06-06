@@ -8,16 +8,36 @@ with open("README.md", "r", encoding="utf-8") as fh:
 with open("requirements.txt", "r", encoding="utf-8") as f:
     requirements = f.read().splitlines()
 
-# Read version from package
+# Read version dynamically (same system as package)
 def get_version():
-    """Get version from route_planner/__init__.py"""
-    import re
-    with open("route_planner/__init__.py", "r", encoding="utf-8") as f:
-        content = f.read()
-    match = re.search(r'^__version__ = [\'"]([^\'"]*)[\'"]', content, re.MULTILINE)
-    if match:
-        return match.group(1)
-    raise RuntimeError("Unable to find version string")
+    """Get version using the same dynamic system as the package."""
+    import os
+    import subprocess
+    from pathlib import Path
+    
+    # Get current directory (setup.py location)
+    current_dir = Path.cwd()
+    
+    # Try git tags first (single source of truth)
+    try:
+        result = subprocess.run(
+            ['git', 'describe', '--tags', '--abbrev=0'],
+            cwd=current_dir,
+            capture_output=True,
+            text=True,
+            check=True
+        )
+        return result.stdout.strip().lstrip('v')
+    except (subprocess.CalledProcessError, FileNotFoundError):
+        pass
+    
+    # Try environment variable
+    version = os.getenv('VERSION')
+    if version:
+        return version.lstrip('v')
+    
+    # Fallback version (must match package fallback)
+    return "1.1.12"
 
 setup(
     name="route-planner",
