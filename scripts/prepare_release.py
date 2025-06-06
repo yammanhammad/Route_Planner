@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 """
-Release preparation script that updates version-related files for a new release.
-This script ensures version consistency across all files in the project.
+Release preparation script.
 """
 
 import sys
 import re
 from pathlib import Path
 from datetime import datetime
+from version import get_version, update_package_version
 
 def update_version(new_version):
     """Update version in route_planner/__init__.py"""

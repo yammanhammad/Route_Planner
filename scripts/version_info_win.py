@@ -9,8 +9,8 @@ version_info = VSVersionInfo(
   ffi=FixedFileInfo(
     # filevers and prodvers should be always a tuple with four items: (1, 2, 3, 4)
     # Set not needed items to zero 0.
-    filevers=(1, 1, 2, 0),
-    prodvers=(1, 1, 2, 0),
+    filevers=(1, 1, 11, 0),
+    prodvers=(1, 1, 11, 0),
     # Contains a bitmask that specifies the valid bits 'flags'r
     mask=0x3f,
     # Contains a bitmask that specifies the Boolean attributes of the file.
@@ -34,12 +34,12 @@ version_info = VSVersionInfo(
         u'040904B0',
         [StringStruct(u'CompanyName', u'Route Planner Team'),
         StringStruct(u'FileDescription', u'Route Planner - Delivery Route Optimization Application'),
-        StringStruct(u'FileVersion', u'1.1.2'),
+        StringStruct(u'FileVersion', u'1.1.11'),
         StringStruct(u'InternalName', u'RoutePlanner'),
         StringStruct(u'LegalCopyright', u'© 2025 Route Planner Team. Licensed under MIT License.'),
         StringStruct(u'OriginalFilename', u'RoutePlanner.exe'),
         StringStruct(u'ProductName', u'Route Planner'),
-        StringStruct(u'ProductVersion', u'1.1.2')])
+        StringStruct(u'ProductVersion', u'1.1.11')])
       ]), 
     VarFileInfo([VarStruct(u'Translation', [1033, 1200])])
   ]

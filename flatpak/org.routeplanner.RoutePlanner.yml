@@ -16,22 +16,68 @@ modules:
   - name: route-planner
     buildsystem: simple
     build-commands:
-      - mkdir -p ${FLATPAK_DEST}/lib/route-planner/
-      - cp -r . ${FLATPAK_DEST}/lib/route-planner/
-      - mkdir -p ${FLATPAK_DEST}/bin
-      - echo '#!/bin/bash' > ${FLATPAK_DEST}/bin/route-planner
-      - echo 'cd "${FLATPAK_DEST}/lib/route-planner"' >> ${FLATPAK_DEST}/bin/route-planner
-      - echo 'export PYTHONPATH="${FLATPAK_DEST}/lib/route-planner:${PYTHONPATH}"' >> ${FLATPAK_DEST}/bin/route-planner
-      - echo 'python3 -m route_planner.core "$@"' >> ${FLATPAK_DEST}/bin/route-planner
-      - chmod +x ${FLATPAK_DEST}/bin/route-planner
-      - mkdir -p ${FLATPAK_DEST}/share/applications
-      - echo '[Desktop Entry]' > ${FLATPAK_DEST}/share/applications/org.routeplanner.RoutePlanner.desktop
-      - echo 'Name=Route Planner' >> ${FLATPAK_DEST}/share/applications/org.routeplanner.RoutePlanner.desktop
-      - echo 'Comment=Delivery Route Optimizer' >> ${FLATPAK_DEST}/share/applications/org.routeplanner.RoutePlanner.desktop
-      - echo 'Exec=route-planner' >> ${FLATPAK_DEST}/share/applications/org.routeplanner.RoutePlanner.desktop
-      - echo 'Terminal=false' >> ${FLATPAK_DEST}/share/applications/org.routeplanner.RoutePlanner.desktop
-      - echo 'Type=Application' >> ${FLATPAK_DEST}/share/applications/org.routeplanner.RoutePlanner.desktop
-      - echo 'Categories=Office;Utility;' >> ${FLATPAK_DEST}/share/applications/org.routeplanner.RoutePlanner.desktop
+      - mkdir -p /app/lib/route-planner/
+      - cp -r . /app/lib/route-planner/
+      - mkdir -p /app/bin
+      - |
+        cat > /app/bin/route-planner << 'EOF'
+        #!/bin/bash
+        cd "/app/lib/route-planner"
+        export PYTHONPATH="/app/lib/route-planner:${PYTHONPATH}"
+        python3 -c "
+import sys
+import os
+sys.path.insert(0, '/app/lib/route-planner')
+
+try:
+    import PyQt5
+    print('Starting Route Planner GUI...')
+    from route_planner.core import main
+    main()
+except ImportError as e:
+    print('PyQt5 not available, starting in console mode...')
+    print('Error:', str(e))
+    try:
+        from route_planner.console import console_main
+        console_main()
+    except Exception as console_e:
+        print('Console mode also failed:', str(console_e))
+        print('Please install the dependencies manually.')
+        sys.exit(1)
+" "$@"
+        EOF
+      - chmod +x /app/bin/route-planner
+      - mkdir -p /app/share/applications
+      - |
+        cat > /app/share/applications/org.routeplanner.RoutePlanner.desktop << 'EOF'
+        [Desktop Entry]
+        Name=Route Planner
+        Comment=Delivery Route Optimizer
+        Exec=route-planner
+        Terminal=false
+        Type=Application
+        Categories=Office;Utility;
+        EOF
+      - mkdir -p /app/share/metainfo
+      - |
+        cat > /app/share/metainfo/org.routeplanner.RoutePlanner.metainfo.xml << 'EOF'
+        <?xml version="1.0" encoding="UTF-8"?>
+        <component type="desktop-application">
+          <id>org.routeplanner.RoutePlanner</id>
+          <metadata_license>MIT</metadata_license>
+          <project_license>MIT</project_license>
+          <name>Route Planner</name>
+          <summary>Delivery Route Optimizer</summary>
+          <description>
+            <p>A sophisticated desktop application for optimizing delivery routes with support for multiple file formats and interactive maps.</p>
+          </description>
+          <categories>
+            <category>Office</category>
+            <category>Utility</category>
+          </categories>
+          <url type="homepage">https://github.com/innoxent/Route_Planner</url>
+        </component>
+        EOF
     sources:
       - type: dir
         path: .

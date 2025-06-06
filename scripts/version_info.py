@@ -1,33 +1,10 @@
 #!/usr/bin/env python3
 """
 Generate Windows version info file for PyInstaller.
-This dynamically creates version information for the Windows executable.
 """
 
-import sys
 from pathlib import Path
-
-def get_version():
-    """Get the current version from route_planner/__init__.py"""
-    script_dir = Path(__file__).parent
-    project_dir = script_dir.parent
-    sys.path.insert(0, str(project_dir))
-    
-    try:
-        from route_planner import __version__
-        return __version__
-    except ImportError:
-        # Fallback: read directly from file
-        init_file = project_dir / "route_planner" / "__init__.py"
-        if init_file.exists():
-            import re
-            with open(init_file, 'r', encoding='utf-8') as f:
-                content = f.read()
-            match = re.search(r'^__version__ = [\'"]([^\'"]*)[\'"]', content, re.MULTILINE)
-            if match:
-                return match.group(1)
-    
-    raise RuntimeError("Unable to determine version")
+from version import get_version
 
 def generate_version_file():
     """Generate version info file for PyInstaller"""
@@ -89,7 +66,7 @@ version_info = VSVersionInfo(
 '''
 
     # Write to version file
-    version_file = Path(__file__).parent / "version_info_generated.py"
+    version_file = Path(__file__).parent / "version_info_win.py"
     with open(version_file, 'w', encoding='utf-8') as f:
         f.write(version_info_template)
     

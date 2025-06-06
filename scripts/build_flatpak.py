@@ -71,8 +71,8 @@ def get_version():
         return __version__
     except ImportError:
         try:
-            # Try using get_version.py
-            from scripts.get_version import get_version
+            # Try using version module
+            from scripts.version import get_version
             return get_version()
         except ImportError:
             # Fallback to a default version

@@ -35,7 +35,7 @@ jobs:
       - name: Get version
         id: version
         run: |
-          VERSION=$(python scripts/get_version.py)
+          VERSION=$(python scripts/version.py)
           echo "version=$VERSION" >> $GITHUB_OUTPUT
           echo "Version: $VERSION"
 
