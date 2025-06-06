@@ -82,7 +82,17 @@ from PyQt5 import QtWidgets, QtGui, QtCore                 # Core GUI components
 from PyQt5.QtWidgets import QWidget                        # Base widget class for type annotations
 from PyQt5.QtCore import QEvent                            # Event classes for type annotations
 from PyQt5.QtGui import QPaintEvent, QResizeEvent         # Event type annotations
-from PyQt5.QtWebEngineWidgets import QWebEngineView       # Web engine for rendering HTML maps
+
+# Optional web engine for rendering HTML maps - may not be available in all distributions
+try:
+    from PyQt5.QtWebEngineWidgets import QWebEngineView   # Web engine for rendering HTML maps
+    HAS_WEB_ENGINE = True
+except ImportError:
+    # Fallback: Use QTextEdit or similar for displaying map information
+    QWebEngineView = None
+    HAS_WEB_ENGINE = False
+    print("Warning: QtWebEngineWidgets not available. Map display will be limited.")
+
 from PyQt5.QtCore import QTimer, QPropertyAnimation, QRect, QEasingCurve  # Animation and timing utilities
 
 # Scientific computing and algorithm libraries
@@ -2535,11 +2545,20 @@ class PlannerUI(QtWidgets.QMainWindow):
         layout.addWidget(panel)
         
         # Create web view for map display
-        self.web = QWebEngineView()
-        self.web.setObjectName("map_view")
-        self.map_view = self.web  # Alias for tutorial system
-        
-        layout.addWidget(self.web, stretch=3)
+        if HAS_WEB_ENGINE and QWebEngineView:
+            self.web = QWebEngineView()
+            self.web.setObjectName("map_view")
+            self.map_view = self.web  # Alias for tutorial system
+            layout.addWidget(self.web, stretch=3)
+        else:
+            # Fallback: Use QTextEdit to show map information
+            from PyQt5.QtWidgets import QTextEdit
+            self.web = QTextEdit()
+            self.web.setObjectName("map_view")
+            self.web.setReadOnly(True)
+            self.web.setHtml("<h3>Map Display Not Available</h3><p>Web engine not available. Route information will be displayed as text.</p>")
+            self.map_view = self.web  # Alias for tutorial system
+            layout.addWidget(self.web, stretch=3)
         
         # Initialize with default number of stops (this will display the map with stops)
         self._initialize_stops(DEFAULT_STOPS)
@@ -2783,7 +2802,31 @@ class PlannerUI(QtWidgets.QMainWindow):
         try:
             # Save the map to the file and load it in the web view
             folium_map.save(tmp.name)
-            self.web.setUrl(QtCore.QUrl.fromLocalFile(tmp.name))
+            
+            if HAS_WEB_ENGINE and hasattr(self.web, 'setUrl'):
+                # Use web engine to display HTML map
+                self.web.setUrl(QtCore.QUrl.fromLocalFile(tmp.name))
+            else:
+                # Fallback: Read HTML content and display as text
+                with open(tmp.name, 'r', encoding='utf-8') as f:
+                    html_content = f.read()
+                
+                # Extract useful information from the HTML or show a simplified view
+                if hasattr(self.web, 'setHtml'):
+                    # Show a simplified HTML view
+                    simplified_html = f"""
+                    <html><body>
+                    <h3>Route Planner Map</h3>
+                    <p>Interactive map display not available.</p>
+                    <p>Map data has been generated successfully.</p>
+                    <p>Check the route table for detailed information.</p>
+                    </body></html>
+                    """
+                    self.web.setHtml(simplified_html)
+                else:
+                    # Last resort: plain text
+                    self.web.setPlainText("Map generated successfully. Check route table for details.")
+                    
         except Exception as e:
             # Handle errors in map rendering
             logger.error(f"Error displaying map: {e}")

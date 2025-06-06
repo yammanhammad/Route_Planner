@@ -28,7 +28,9 @@ def main():
         shell_script = project_root / ('run_route_planner.bat' if sys.platform == 'win32' else 'run_route_planner.sh')
         
         if not shell_script.exists():
-            print(f"❌ {shell_script.name} not found")
+            # Use ASCII-safe error message for Windows compatibility
+            error_msg = f"ERROR: {shell_script.name} not found"
+            print(error_msg)
             sys.exit(1)
         
         # Execute the shell script which handles environment activation
@@ -38,10 +40,10 @@ def main():
                                    cwd=str(project_root))
             sys.exit(result.returncode)
         except KeyboardInterrupt:
-            print("\n🛑 Application interrupted by user")
+            print("\nApplication interrupted by user")
             sys.exit(0)
         except Exception as e:
-            print(f"❌ Error running application: {e}")
+            print(f"ERROR: Error running application: {e}")
             sys.exit(1)
 
 if __name__ == "__main__":
