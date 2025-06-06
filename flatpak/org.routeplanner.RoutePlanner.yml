@@ -42,25 +42,22 @@ modules:
       - mkdir -p /app/share/icons/hicolor/64x64/apps
       - mkdir -p /app/share/icons/hicolor/128x128/apps
       - |
-        # Use existing icon if available, otherwise copy from project root
+        # Copy icons if they exist, otherwise create a basic SVG icon
         if [ -f "icons/org.routeplanner.RoutePlanner-64.png" ]; then
           cp icons/org.routeplanner.RoutePlanner-64.png /app/share/icons/hicolor/64x64/apps/org.routeplanner.RoutePlanner.png
           cp icons/org.routeplanner.RoutePlanner-128.png /app/share/icons/hicolor/128x128/apps/org.routeplanner.RoutePlanner.png
-        elif [ -f "icon.ico" ]; then
-          # Convert ICO to PNG if ImageMagick is available
-          if command -v convert >/dev/null 2>&1; then
-            convert icon.ico[0] -resize 64x64 /app/share/icons/hicolor/64x64/apps/org.routeplanner.RoutePlanner.png
-            convert icon.ico[0] -resize 128x128 /app/share/icons/hicolor/128x128/apps/org.routeplanner.RoutePlanner.png
-          else
-            # Copy the ICO file as fallback (some systems can handle it)
-            cp icon.ico /app/share/icons/hicolor/64x64/apps/org.routeplanner.RoutePlanner.png
-            cp icon.ico /app/share/icons/hicolor/128x128/apps/org.routeplanner.RoutePlanner.png
-          fi
+          echo "PNG icons installed successfully"
         else
-          # Create a minimal placeholder icon
-          echo "Creating placeholder icon..."
-          touch /app/share/icons/hicolor/64x64/apps/org.routeplanner.RoutePlanner.png
-          touch /app/share/icons/hicolor/128x128/apps/org.routeplanner.RoutePlanner.png
+          # Create a basic SVG icon as fallback
+          mkdir -p /app/share/icons/hicolor/scalable/apps
+          cat > /app/share/icons/hicolor/scalable/apps/org.routeplanner.RoutePlanner.svg << 'SVGEOF'
+        <?xml version="1.0" encoding="UTF-8"?>
+        <svg width="64" height="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+          <rect width="64" height="64" fill="#2196F3" rx="8"/>
+          <text x="32" y="40" font-family="Arial, sans-serif" font-size="24" fill="white" text-anchor="middle">RP</text>
+        </svg>
+        SVGEOF
+          echo "Basic SVG icon created as fallback"
         fi
       - mkdir -p /app/share/metainfo
       - |
