@@ -1,0 +1,36 @@
+app-id: org.routeplanner.RoutePlanner
+runtime: org.freedesktop.Platform
+runtime-version: "23.08"
+sdk: org.freedesktop.Sdk
+command: route-planner
+finish-args:
+  - --share=network
+  - --share=ipc  
+  - --socket=fallback-x11
+  - --socket=wayland
+  - --device=dri
+  - --filesystem=home
+  - --env=QT_QPA_PLATFORM=wayland;xcb
+
+modules:
+  - name: route-planner
+    buildsystem: simple
+    build-commands:
+      - cp -r . ${FLATPAK_DEST}/lib/route-planner/
+      - mkdir -p ${FLATPAK_DEST}/bin
+      - echo '#!/bin/bash' > ${FLATPAK_DEST}/bin/route-planner
+      - echo 'cd "${FLATPAK_DEST}/lib/route-planner"' >> ${FLATPAK_DEST}/bin/route-planner
+      - echo 'export PYTHONPATH="${FLATPAK_DEST}/lib/route-planner:${PYTHONPATH}"' >> ${FLATPAK_DEST}/bin/route-planner
+      - echo 'python3 -m route_planner.core "$@"' >> ${FLATPAK_DEST}/bin/route-planner
+      - chmod +x ${FLATPAK_DEST}/bin/route-planner
+      - mkdir -p ${FLATPAK_DEST}/share/applications
+      - echo '[Desktop Entry]' > ${FLATPAK_DEST}/share/applications/org.routeplanner.RoutePlanner.desktop
+      - echo 'Name=Route Planner' >> ${FLATPAK_DEST}/share/applications/org.routeplanner.RoutePlanner.desktop
+      - echo 'Comment=Delivery Route Optimizer' >> ${FLATPAK_DEST}/share/applications/org.routeplanner.RoutePlanner.desktop
+      - echo 'Exec=route-planner' >> ${FLATPAK_DEST}/share/applications/org.routeplanner.RoutePlanner.desktop
+      - echo 'Terminal=false' >> ${FLATPAK_DEST}/share/applications/org.routeplanner.RoutePlanner.desktop
+      - echo 'Type=Application' >> ${FLATPAK_DEST}/share/applications/org.routeplanner.RoutePlanner.desktop
+      - echo 'Categories=Office;Utility;' >> ${FLATPAK_DEST}/share/applications/org.routeplanner.RoutePlanner.desktop
+    sources:
+      - type: dir
+        path: .
