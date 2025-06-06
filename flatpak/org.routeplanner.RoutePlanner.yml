@@ -16,6 +16,7 @@ modules:
   - name: route-planner
     buildsystem: simple
     build-commands:
+      - mkdir -p ${FLATPAK_DEST}/lib/route-planner/
       - cp -r . ${FLATPAK_DEST}/lib/route-planner/
       - mkdir -p ${FLATPAK_DEST}/bin
       - echo '#!/bin/bash' > ${FLATPAK_DEST}/bin/route-planner
