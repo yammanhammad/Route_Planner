@@ -11,7 +11,7 @@ This directory contains automation scripts that handle version management, envir
 ```bash
 # Version Management
 python scripts/version.py                    # Show current version
-python scripts/version.py --update 1.2.3    # Update package version to 1.2.3
+python scripts/version.py --update X.Y.Z    # Update package version to X.Y.Z (e.g., 1.2.3)
 
 # Environment & Development
 python scripts/setup_env.py                  # Setup development environment
@@ -97,10 +97,10 @@ route-planner                      # If installed globally
 python scripts/version.py
 
 # Update version for release
-python scripts/version.py --update 2.1.0
+python scripts/version.py --update X.Y.Z
 
 # Prepare release (updates changelog, creates tag)
-python scripts/prepare_release.py --version 2.1.0
+python scripts/prepare_release.py --version X.Y.Z
 ```
 
 ### 📦 Building Packages

@@ -41,49 +41,61 @@ def get_version_from_package():
         return None
 
 def get_version():
-    """Get current version. Priority: git -> package -> env -> default."""
-    # Try git first (for releases)
+    """Get current version. Priority: git tags -> env -> package -> default."""
+    # Priority 1: Git tags (single source of truth)
     version = get_version_from_git()
     if version:
         return version
     
-    # Try package version
-    version = get_version_from_package()
-    if version:
-        return version
-    
-    # Try environment (for CI)
+    # Priority 2: Environment (for CI overrides)
     version = os.getenv('VERSION')
     if version:
         return version.lstrip('v')
     
-    # Default fallback
+    # Priority 3: Package version (fallback for development)
+    version = get_version_from_package()
+    if version:
+        return version
+    
+    # Priority 4: Default fallback
     return "0.0.0"
 
 def update_package_version(new_version):
-    """Update version in __init__.py."""
+    """Update fallback version in __init__.py and create git tag."""
     if not INIT_FILE.exists():
         print(f"Error: {INIT_FILE} not found")
         return False
     
     try:
+        # Update the fallback version in the package
         with open(INIT_FILE, 'r', encoding='utf-8') as f:
             content = f.read()
         
+        # Update the fallback version in the _get_version function
         updated = re.sub(
-            r'__version__ = [\'"][^\'"]*[\'"]',
-            f'__version__ = "{new_version}"',
+            r'return "[\d\.]+"',
+            f'return "{new_version}"',
             content
         )
         
         if content != updated:
             with open(INIT_FILE, 'w', encoding='utf-8') as f:
                 f.write(updated)
-            print(f"Updated version to {new_version}")
+            print(f"Updated fallback version to {new_version}")
+        
+        # Create git tag (this becomes the real source of truth)
+        try:
+            import subprocess
+            subprocess.run(['git', 'tag', f'v{new_version}'], check=True)
+            print(f"Created git tag v{new_version}")
             return True
-        else:
-            print(f"Version already {new_version}")
-            return True
+        except subprocess.CalledProcessError as e:
+            if "already exists" in str(e):
+                print(f"Tag v{new_version} already exists")
+                return True
+            else:
+                print(f"Error creating git tag: {e}")
+                return False
             
     except Exception as e:
         print(f"Error updating version: {e}")

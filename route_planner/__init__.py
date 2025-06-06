@@ -6,7 +6,25 @@ A PyQt5-based delivery route optimization application with interactive map visua
 and comprehensive offline support.
 """
 
-__version__ = "1.1.11"
+def _get_version():
+    """Get version from git tags (single source of truth) or fallback."""
+    try:
+        import subprocess
+        from pathlib import Path
+        project_root = Path(__file__).parent.parent
+        result = subprocess.run(
+            ['git', 'describe', '--tags', '--abbrev=0'],
+            cwd=project_root,
+            capture_output=True,
+            text=True,
+            check=True
+        )
+        return result.stdout.strip().lstrip('v')
+    except (subprocess.CalledProcessError, FileNotFoundError, ImportError):
+        # Fallback for environments without git or in packaged distributions
+        return "1.1.11"
+
+__version__ = _get_version()
 __author__ = "Route Planner Development Team"
 
 # Ensure config is available at package level

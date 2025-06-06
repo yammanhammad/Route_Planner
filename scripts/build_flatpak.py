@@ -75,9 +75,16 @@ def get_version():
             from scripts.version import get_version
             return get_version()
         except ImportError:
-            # Fallback to a default version
-            print("⚠️ Could not determine version, using 1.0.0")
-            return "1.0.0"
+            # Fallback: try to get version from git or use default
+            print("⚠️ Could not determine version from package, trying git...")
+            try:
+                import subprocess
+                result = subprocess.run(['git', 'describe', '--tags', '--abbrev=0'], 
+                                      capture_output=True, text=True, check=True)
+                return result.stdout.strip().lstrip('v')
+            except (subprocess.CalledProcessError, FileNotFoundError):
+                print("⚠️ Git not available, using fallback version 1.0.0")
+                return "1.0.0"
 
 def create_flatpak_manifest():
     """Create a Flatpak manifest for Route Planner."""

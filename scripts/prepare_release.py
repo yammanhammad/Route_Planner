@@ -170,7 +170,7 @@ def add_release_notes_entry(version):
 def main():
     if len(sys.argv) != 2:
         print("Usage: python scripts/prepare_release.py <version>")
-        print("Example: python scripts/prepare_release.py 1.2.0")
+        print("Example: python scripts/prepare_release.py X.Y.Z (semantic versioning)")
         sys.exit(1)
     
     new_version = sys.argv[1]
