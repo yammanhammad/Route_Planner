@@ -24,27 +24,7 @@ modules:
         #!/bin/bash
         cd "/app/lib/route-planner"
         export PYTHONPATH="/app/lib/route-planner:${PYTHONPATH}"
-        python3 -c "
-import sys
-import os
-sys.path.insert(0, '/app/lib/route-planner')
-
-try:
-    import PyQt5
-    print('Starting Route Planner GUI...')
-    from route_planner.core import main
-    main()
-except ImportError as e:
-    print('PyQt5 not available, starting in console mode...')
-    print('Error:', str(e))
-    try:
-        from route_planner.console import console_main
-        console_main()
-    except Exception as console_e:
-        print('Console mode also failed:', str(console_e))
-        print('Please install the dependencies manually.')
-        sys.exit(1)
-" "$@"
+        exec python3 main.py "$@"
         EOF
       - chmod +x /app/bin/route-planner
       - mkdir -p /app/share/applications
