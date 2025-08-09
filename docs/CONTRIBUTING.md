@@ -22,7 +22,7 @@ python main.py    # Test the application
 1. Fork the repository on GitHub
 2. Clone your fork locally:
    ```bash
-   git clone https://github.com/YOUR_USERNAME/Route_Planner.git
+   git clone https://github.com/yammanhammad/Route_Planner.git
    cd Route_Planner
    ```
 3. Set up the development environment:
